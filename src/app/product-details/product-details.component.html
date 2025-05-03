@@ -1,0 +1,18 @@
+<div class="product-details-card">
+    <h2>Détails du Produit</h2>
+    
+    <div class="detail-content">
+      <img [src]="product.image"
+           [alt]="product.name"
+           (error)="handleImageError($event)"
+           class="detail-image" />
+      
+      <div class="detail-info">
+        <p><strong>Modèle:</strong> {{ product.name }}</p>
+        <p><strong>Stock:</strong> {{ product.quantity }} unités</p>
+        <p><strong>Prix:</strong> {{ product.price }}€</p>
+      </div>
+    </div>
+  </div>
+  
+  

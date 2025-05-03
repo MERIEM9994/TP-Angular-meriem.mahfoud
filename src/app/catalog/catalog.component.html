@@ -1,0 +1,29 @@
+<h1 class="store-title">Store de Vente - Électroniques</h1>
+
+<div class="product-list">
+  <div class="product-card"
+       *ngFor="let product of products"
+       [ngClass]="{'low-stock': product.quantity < 10}">
+
+    <div class="product-header">
+      <h2>{{ product.name }}</h2>
+    </div>
+
+    <div class="product-body">
+      <img [src]="product.image"
+           [alt]="product.name"
+           (error)="handleImageError($event)"
+           class="product-image">
+
+      <div class="product-info">
+        <p><strong>Quantité:</strong> {{ product.quantity }}</p>
+        <p><strong>Prix:</strong> {{ product.price }}€</p>
+      </div>
+
+      <button (click)="showDetails(product)" class="details-btn">
+        Voir Détails
+      </button>
+    </div>
+  </div>
+</div>
+
