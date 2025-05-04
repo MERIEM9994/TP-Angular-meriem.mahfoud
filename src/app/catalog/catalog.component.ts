@@ -1,21 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-import { ProductService } from '../services/product.service';
-import { Router } from '@angular/router'; // Importer Router
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { ProductService } from '../services/product.service';
+import { Product } from '../models/product.model';
 
 @Component({
-  selector: 'app-catalog',
   standalone: true,
-  imports: [CommonModule], // Assurez-vous que CommonModule est inclus pour *ngIf
+  imports: [CommonModule, RouterModule],
   templateUrl: './catalog.component.html',
   styleUrls: ['./catalog.component.css']
 })
 export class CatalogComponent implements OnInit {
-  products: any[] = [];
-  isLoading = true;
-  errorMessage: string | null = null;
+  products: Product[] = [];
+  loading = true;
+  error: string | null = null;
 
-  constructor(private productService: ProductService, private router: Router) {} // Injection du Router
+  constructor(private productService: ProductService) {}
 
   ngOnInit(): void {
     this.loadProducts();
@@ -23,27 +23,38 @@ export class CatalogComponent implements OnInit {
 
   loadProducts(): void {
     this.productService.getProducts().subscribe({
-      next: (products) => {
-        this.products = products;
-        this.isLoading = false;
+      next: (response) => {
+        console.log('Produits reçus:', response.data); // Debug
+        this.products = response.data.map(product => ({
+          ...product,
+          // Normalise le nom de l'image
+          image: product.image.toLowerCase().replace(/\s+/g, '-')
+        }));
+        this.loading = false;
       },
-      error: (error) => {
-        this.errorMessage = error.message || 'Erreur lors du chargement des produits';
-        this.isLoading = false;
+      error: (err) => {
+        console.error('Erreur:', err);
+        this.error = 'Erreur de chargement';
+        this.loading = false;
       }
     });
   }
 
-  // Méthode pour afficher les détails du produit
-  showDetails(product: any): void {
-    console.log('Détails du produit :', product); // Afficher dans la console pour l'instant
-    // Naviguer vers une page de détails en passant l'ID du produit
-    this.router.navigate(['/product', product.id]); // Assurez-vous que cette route existe
+  getImageUrl(imageName: string): string {
+    // Ajoute un timestamp pour éviter le cache
+    return `assets/images/${imageName}?t=${Date.now()}`;
   }
 
-  handleImageError(event: Event): void {
+  handleImageError(event: Event, product: Product): void {
     const img = event.target as HTMLImageElement;
-    img.src = 'assets/images/imagenotfound.png'; // Image de remplacement en cas d'erreur
-    img.classList.add('error-image');
+    console.warn(`Image manquante: ${product.image}`);
+    img.src = 'assets/images/placeholder.png';
+    img.style.opacity = '0.7';
+  }
+
+  getStockStatus(quantity: number): string {
+    if (quantity === 0) return 'rupture';
+    if (quantity < 10) return 'faible';
+    return 'ok';
   }
 }

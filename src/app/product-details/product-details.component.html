@@ -1,18 +1,20 @@
-<div class="product-details-card">
-    <h2>Détails du Produit</h2>
-    
-    <div class="detail-content">
-      <img [src]="product.image"
-           [alt]="product.name"
-           (error)="handleImageError($event)"
-           class="detail-image" />
-      
-      <div class="detail-info">
-        <p><strong>Modèle:</strong> {{ product.name }}</p>
-        <p><strong>Stock:</strong> {{ product.quantity }} unités</p>
-        <p><strong>Prix:</strong> {{ product.price }}€</p>
-      </div>
-    </div>
+<!-- src/app/product-details/product-details.component.html -->
+<div *ngIf="loading" class="loading">Chargement...</div>
+
+<div *ngIf="product" class="product-details">
+  <div class="image-container">
+    <img [src]="'assets/images/' + product.image" [alt]="product.title">
   </div>
-  
+  <div class="info">
+    <h2>{{ product.title }}</h2>
+    <p class="price">{{ product.price | currency:'EUR' }}</p>
+    <p class="category">Catégorie: {{ product.category }}</p>
+    <button routerLink="/catalog" class="back-btn">Retour au catalogue</button>
+  </div>
+</div>
+
+<div *ngIf="!product && !loading" class="not-found">
+  Produit non trouvé
+</div>
+
   

@@ -1,9 +1,11 @@
+// src/app/app.routes.ts
 import { Routes } from '@angular/router';
 import { CatalogComponent } from './catalog/catalog.component';
-import { ProductDetailsPageComponent } from './product-details-page/product-details-page.component';
+import { ProductDetailsComponent } from './product-details/product-details.component';
 
 export const routes: Routes = [
-  { path: '', component: CatalogComponent },
-  { path: 'product/:id', component: ProductDetailsPageComponent }
+  { path: 'catalog', component: CatalogComponent },
+  { path: 'product-details/:id', component: ProductDetailsComponent },
+  { path: '', redirectTo: '/catalog', pathMatch: 'full' },
+  { path: '**', redirectTo: '/catalog' }
 ];
-

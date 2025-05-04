@@ -1,47 +1,33 @@
-import { Component, Input } from '@angular/core';
+// src/app/product-details/product-details.component.ts
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ProductService } from '../services/product.service';
+import { Product } from '../models/product.model';
 
 @Component({
-  selector: 'app-product-details',
   standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="product-details">
-      <img [src]="product.image" 
-           [alt]="product.name"
-           (error)="handleImageError($event)"
-           class="product-image">
-      
-      <div class="product-info">
-        <h2>{{ product.name }}</h2>
-        <p><strong>Stock:</strong> {{ product.quantity }} unités</p>
-        <p><strong>Prix:</strong> {{ product.price | currency:'EUR' }}</p>
-      </div>
-    </div>
-  `,
-  styles: [`
-    .product-details { 
-      display: flex; 
-      gap: 2rem; 
-      padding: 2rem;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-    }
-    .product-image { 
-      max-width: 300px; 
-      max-height: 300px;
-      object-fit: contain;
-    }
-    .product-info { flex: 1; }
-  `]
+  imports: [CommonModule, RouterModule],
+  templateUrl: './product-details.component.html',
+  styleUrls: ['./product-details.component.css']
 })
-export class ProductDetailsComponent {
-  @Input() product!: any;
+export class ProductDetailsComponent implements OnInit {
+  product?: Product;
+  loading = true;
 
-  handleImageError(event: Event): void {
-    const img = event.target as HTMLImageElement;
-    img.src = 'assets/images/imagenotfound.png';
-    img.classList.add('error-image');
+  constructor(
+    private route: ActivatedRoute,
+    private productService: ProductService
+  ) {}
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.params['id'];
+    this.productService.getProductById(id).subscribe({
+      next: (product) => {
+        this.product = product;
+        this.loading = false;
+      },
+      error: () => this.loading = false
+    });
   }
 }
-
