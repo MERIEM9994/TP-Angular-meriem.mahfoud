@@ -1,94 +1,181 @@
-/* Styles de base */
+/* ========== BASE STYLES ========== */
 .catalog {
+  font-family: 'Segoe UI', system-ui, sans-serif;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 2rem;
+  min-height: 80vh;
 }
 
-.loading-message, .error-message {
+/* ========== LOADING STATES ========== */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+}
+
+.loading-spinner {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3f51b5;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.loading-text {
+  color: #3f51b5;
+  font-weight: 500;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ========== ERROR HANDLING ========== */
+.error-alert {
+  background: #ffebee;
+  color: #c62828;
+  padding: 1.5rem;
+  border-radius: 8px;
   text-align: center;
-  padding: 40px;
-  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 2rem auto;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-.error-message {
-  color: #d32f2f;
+.error-icon {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  display: inline-block;
 }
 
-/* Grille de produits */
-.products-container {
+.reload-btn {
+  background: #3f51b5;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  margin-top: 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reload-btn:hover {
+  background: #303f9f;
+  transform: translateY(-2px);
+}
+
+/* ========== PRODUCT GRID ========== */
+.products-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 25px;
-  margin-top: 20px;
+  gap: 2rem;
+  margin-top: 2rem;
 }
 
-/* Carte produit */
+@media (max-width: 768px) {
+  .products-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+/* ========== PRODUCT CARD ========== */
 .product-card {
   border: 1px solid #e0e0e0;
-  border-radius: 10px;
+  border-radius: 12px;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   background: white;
+  position: relative;
 }
 
 .product-card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-8px);
   box-shadow: 0 10px 20px rgba(0,0,0,0.1);
 }
 
-/* Image produit */
-.product-image-container {
-  height: 200px;
+/* Stock status indicators */
+.product-card.out-of-stock {
+  border-left: 4px solid #f44336;
+}
+
+.product-card.low-stock {
+  border-left: 4px solid #ffc107;
+}
+
+/* ========== PRODUCT IMAGE ========== */
+.img-container {
+  height: 220px;
+  background: #f9f9f9;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #f9f9f9;
-  padding: 15px;
+  padding: 1.5rem;
+  position: relative;
 }
 
-.product-image {
+.img-container img {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+  transition: opacity 0.3s ease;
 }
 
-/* Détails produit */
-.product-details {
-  padding: 15px;
+.disabled-img {
+  opacity: 0.6;
+  filter: grayscale(80%);
+}
+
+/* ========== PRODUCT DETAILS ========== */
+.details {
+  padding: 1.5rem;
 }
 
 .product-title {
-  font-size: 1.1rem;
-  margin: 0 0 10px;
+  margin: 0 0 0.75rem;
+  font-size: 1.15rem;
   color: #333;
+  font-weight: 600;
+  min-height: 3.5rem;
 }
 
-.product-price {
-  font-size: 1.3rem;
-  font-weight: bold;
+.price {
+  font-weight: 700;
   color: #1976d2;
-  margin: 0 0 15px;
+  margin: 0 0 1.25rem;
+  font-size: 1.3rem;
 }
 
-/* Informations stock */
+/* ========== STOCK INFO ========== */
 .stock-info {
   display: flex;
   align-items: center;
-  margin: 15px 0;
-  padding: 8px 12px;
-  border-radius: 4px;
+  margin: 1.25rem 0;
+  padding: 0.75rem;
+  border-radius: 6px;
   font-size: 0.95rem;
+  background: #e8f5e9;
+  color: #2e7d32;
 }
 
 .stock-label {
-  font-weight: bold;
-  margin-right: 8px;
+  font-weight: 600;
+  margin-right: 0.5rem;
 }
 
 .stock-quantity {
   font-weight: 500;
-  margin-right: 5px;
+  margin-right: 0.25rem;
 }
 
 .stock-warning {
@@ -96,63 +183,55 @@
   font-size: 0.85rem;
 }
 
-/* Styles selon le stock */
-.stock-ok {
-  background-color: #e8f5e9;
-  color: #2e7d32;
-}
-
-.stock-faible {
-  background-color: #fff8e1;
-  color: #ff8f00;
-}
-
-.stock-rupture {
-  background-color: #ffebee;
+/* Stock status classes */
+.stock-info.out-of-stock {
+  background: #ffebee;
   color: #c62828;
 }
 
-.low-stock {
-  border-left: 4px solid #ffc107;
+.stock-info.low-stock {
+  background: #fff8e1;
+  color: #ff8f00;
 }
 
-.no-stock {
-  position: relative;
-  border-left: 4px solid #f44336;
-}
-
-.no-stock::after {
-  content: "RUPTURE";
-  position: absolute;
-  top: 15px;
-  right: -25px;
-  background: #f44336;
-  color: white;
-  padding: 3px 25px;
-  transform: rotate(45deg);
-  font-size: 0.7rem;
-  font-weight: bold;
-}
-
-/* Bouton Voir détails */
-.view-details-btn {
-  width: 100%;
+/* ========== DETAILS BUTTON ========== */
+.details-btn {
+  display: block;
+  text-align: center;
   background: #3f51b5;
   color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: background 0.3s;
+  padding: 0.85rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
 }
 
-.view-details-btn:hover:not([disabled]) {
+.details-btn:hover:not(.disabled) {
   background: #303f9f;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-.view-details-btn:disabled {
+.details-btn.disabled {
   background: #9e9e9e;
   cursor: not-allowed;
   opacity: 0.7;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ========== OUT OF STOCK BADGE ========== */
+.out-of-stock-badge {
+  position: absolute;
+  top: 15px;
+  right: -30px;
+  background: #f44336;
+  color: white;
+  padding: 0.25rem 2rem;
+  transform: rotate(45deg);
+  font-size: 0.75rem;
+  font-weight: bold;
+  z-index: 1;
 }

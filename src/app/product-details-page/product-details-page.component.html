@@ -1,18 +1,19 @@
-<!-- src/app/product-details-page/product-details-page.component.html -->
-<header>
-    <!-- Votre en-tête de site ici -->
-    <h1>Ma Boutique en Ligne</h1>
+<header class="page-header">
+  <div class="header-content">
+    <h1>Ma Boutique</h1>
     <nav>
-      <a routerLink="/catalog">Catalogue</a>
+      <a routerLink="/catalog" routerLinkActive="active">
+        Retour au catalogue
+      </a>
     </nav>
-  </header>
-  
-  <main>
-    <router-outlet></router-outlet>
-  </main>
-  
-  <footer>
-    <!-- Votre pied de page ici -->
-    <p>&copy; 2023 Ma Boutique. Tous droits réservés.</p>
-  </footer>
+  </div>
+</header>
+
+<main class="page-content">
+  <router-outlet></router-outlet>
+</main>
+
+<footer class="page-footer">
+  <p>&copy; {{ currentYear }} Ma Boutique. Tous droits réservés.</p>
+</footer>
   

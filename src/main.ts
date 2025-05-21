@@ -1,3 +1,5 @@
+/// <reference types="@angular/localize" />
+
 // src/main.ts
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';

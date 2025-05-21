@@ -1,45 +1,60 @@
 <div class="catalog">
-  <h1>Notre Catalogue de Produits</h1>
+  <h1 i18n>Nxxxx</h1>
 
-  <div *ngIf="loading" class="loading-message">
-    <p>Chargement en cours...</p>
-  </div>
-
-  <div *ngIf="error" class="error-message">
-    <p>{{ error }}</p>
-  </div>
-
-  <div *ngIf="!loading && !error" class="products-container">
-    <div *ngFor="let product of products" 
-         class="product-card"
-         [class.low-stock]="product.quantity < 10 && product.quantity > 0"
-         [class.no-stock]="product.quantity === 0">
-      
-      <div class="product-image-container">
-        <img [src]="getImageUrl(product.image)"
-             [alt]="product.title"
-             (error)="handleImageError($event, product)"
-             class="product-image">
-      </div>
-
-      <div class="product-details">
-        <h2 class="product-title">{{ product.title }}</h2>
-        <p class="product-price">{{ product.price | currency:'EUR':'symbol':'1.2-2':'fr' }}</p>
-        
-        <div class="stock-info" [class]="'stock-' + getStockStatus(product.quantity)">
-          <span class="stock-label">Stock:</span>
-          <span class="stock-quantity">{{ product.quantity }}</span>
-          <span *ngIf="product.quantity < 10" class="stock-warning">
-            {{ product.quantity === 0 ? '(Rupture)' : '(Stock faible)' }}
-          </span>
-        </div>
-
-        <button class="view-details-btn"
-                [routerLink]="['/product-details', product.id]"
-                [disabled]="product.quantity === 0">
-          Voir détails
-        </button>
-      </div>
+  @if (loading) {
+    <div class="loading-spinner">
+      <div class="spinner"></div>
+      <p>Chargement en cours...</p>
     </div>
-  </div>
+  } @else if (error) {
+    <div class="error-alert">
+      <span class="error-icon">⚠️</span>
+      <p>{{ error }}</p>
+      <button (click)="loadProducts()" class="reload-btn">
+        <span class="reload-icon">⟳</span> Recharger
+      </button>
+    </div>
+  } @else {
+    <div class="products-grid">
+      @for (product of products; track product.id) {
+        <div class="product-card"
+             [class.out-of-stock]="product.quantity === 0"
+             [class.low-stock]="product.quantity < 10 && product.quantity > 0"
+             [attr.data-id]="product.id">
+          
+          <div class="img-container">
+            <img [src]="getImageUrl(product.image)"
+                 [alt]="product.title + ' image'"
+                 (error)="handleImageError($event)"
+                 [class.disabled-img]="product.quantity === 0"
+                 loading="lazy">
+          </div>
+
+          <div class="details">
+            <h3 class="product-title">{{ product.title }}</h3>
+            <p class="price">{{ product.price | currency:'EUR':'symbol':'1.2-2':'fr' }}</p>
+
+            <div class="stock-info"
+                 [class.out-of-stock]="product.quantity === 0"
+                 [class.low-stock]="product.quantity < 10 && product.quantity > 0">
+              <span class="stock-label">Stock:</span>
+              <span class="stock-quantity">{{ product.quantity }}</span>
+              @if (product.quantity < 10) {
+                <span class="stock-warning">
+                  ({{ product.quantity === 0 ? 'Rupture' : 'Stock faible' }})
+                </span>
+              }
+            </div>
+
+            <a [routerLink]="['/products', product.id]"
+               class="details-btn"
+               [class.disabled]="product.quantity === 0"
+               [attr.aria-disabled]="product.quantity === 0 ? 'true' : 'false'">
+              {{ product.quantity === 0 ? 'Indisponible' : 'Voir détails' }}
+            </a>
+          </div>
+        </div>
+      }
+    </div>
+  }
 </div>

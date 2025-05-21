@@ -1,13 +1,13 @@
-// src/app/product-details-page/product-details-page.component.ts
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-product-details-page',
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './product-details-page.component.html',
   styleUrls: ['./product-details-page.component.css']
 })
 export class ProductDetailsPageComponent {
-  // Ce composant sert de conteneur pour la page complète
-  // Vous pouvez y ajouter des éléments communs comme header, footer, etc.
+  currentYear = new Date().getFullYear();
 }
-

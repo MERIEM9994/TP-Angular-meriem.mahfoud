@@ -23,38 +23,45 @@ export class CatalogComponent implements OnInit {
 
   loadProducts(): void {
     this.productService.getProducts().subscribe({
-      next: (response) => {
-        console.log('Produits reçus:', response.data); // Debug
-        this.products = response.data.map(product => ({
-          ...product,
-          // Normalise le nom de l'image
-          image: product.image.toLowerCase().replace(/\s+/g, '-')
+      next: (products) => {
+        this.products = products.map(p => ({
+          ...p,
+          quantity: +p.quantity || 0,
+          image: p.image?.trim() || 'placeholder.png'
         }));
         this.loading = false;
       },
       error: (err) => {
-        console.error('Erreur:', err);
-        this.error = 'Erreur de chargement';
+        this.error = 'Échec du chargement. Vérifiez votre connexion et réessayez.';
         this.loading = false;
+        console.error('Erreur:', err);
+        setTimeout(() => this.loadProducts(), 3000); // Réessai automatique après 3s
       }
     });
   }
 
   getImageUrl(imageName: string): string {
-    // Ajoute un timestamp pour éviter le cache
-    return `assets/images/${imageName}?t=${Date.now()}`;
+    // Solution robuste pour le cache et les images manquantes
+    return imageName ? `/assets/images/${imageName}?t=${Date.now()}` : '/assets/images/placeholder.png';
   }
 
-  handleImageError(event: Event, product: Product): void {
+  handleImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    console.warn(`Image manquante: ${product.image}`);
-    img.src = 'assets/images/placeholder.png';
+    img.src = '/assets/images/placeholder.png';
     img.style.opacity = '0.7';
   }
 
-  getStockStatus(quantity: number): string {
-    if (quantity === 0) return 'rupture';
-    if (quantity < 10) return 'faible';
-    return 'ok';
+  // Nouvelle méthode unifiée pour le statut du stock
+  getStockStatus(quantity: number): {
+    cardClass: string;
+    stockClass: string;
+    label: string;
+  } {
+    return {
+      cardClass: quantity === 0 ? 'out-of-stock' : quantity < 10 ? 'low-stock' : '',
+      stockClass: quantity === 0 ? 'out' : quantity < 10 ? 'low' : '',
+      label: quantity === 0 ? 'Rupture' : quantity < 10 ? 'Faible' : ''
+    };
   }
 }
+

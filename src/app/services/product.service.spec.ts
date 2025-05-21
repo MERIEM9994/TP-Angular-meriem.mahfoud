@@ -1,16 +1,19 @@
-import { TestBed } from '@angular/core/testing';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Product } from '../models/product.model';
 
-import { ProductService } from './product.service';
+@Injectable({ providedIn: 'root' })
+export class ProductService {
+  private apiUrl = 'http://localhost:3000/api';
 
-describe('ProductService', () => {
-  let service: ProductService;
+  constructor(private http: HttpClient) {}
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(ProductService);
-  });
+  getProducts(): Observable<{ data: Product[] }> {
+    return this.http.get<{ data: Product[] }>(`${this.apiUrl}/products`);
+  }
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+  getProductById(id: number): Observable<Product> {
+    return this.http.get<Product>(`${this.apiUrl}/products/${id}`);
+  }
+}

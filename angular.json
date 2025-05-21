@@ -4,6 +4,12 @@
   "newProjectRoot": "projects",
   "projects": {
     "tp5_angulaire": {
+      "i18n": {
+        "sourceLocale": "en",
+        "locales": {
+          "fr": "src/locale/messages.fr.xlf"
+        }
+      },
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,11 +19,13 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "localize": ["en", "fr"],
             "outputPath": "dist/tp5_angulaire",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
-              "zone.js"
+              "zone.js",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.app.json",
             "assets": [
@@ -31,6 +39,7 @@
           },
           "configurations": {
             "production": {
+              "localize": true,
               "budgets": [
                 {
                   "type": "initial",
@@ -46,9 +55,29 @@
               "outputHashing": "all"
             },
             "development": {
+              "localize": true,
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "fr": {
+              "localize": ["fr"],
+              "outputPath": "dist/tp5_angulaire/fr",
+              "index": "src/index.html",
+              "browser": "src/main.ts",
+              "polyfills": [
+                "zone.js",
+                "@angular/localize/init"
+              ],
+              "tsConfig": "tsconfig.app.json",
+              "assets": [
+                "src/favicon.ico",
+                "src/assets"
+              ],
+              "styles": [
+                "src/styles.css"
+              ],
+              "scripts": []
             }
           },
           "defaultConfiguration": "production"
@@ -61,6 +90,9 @@
             },
             "development": {
               "buildTarget": "tp5_angulaire:build:development"
+            },
+            "fr": {
+              "buildTarget": "tp5_angulaire:build:fr"
             }
           },
           "defaultConfiguration": "development"
@@ -73,7 +105,8 @@
           "options": {
             "polyfills": [
               "zone.js",
-              "zone.js/testing"
+              "zone.js/testing",
+              "@angular/localize/init"
             ],
             "tsConfig": "tsconfig.spec.json",
             "assets": [
@@ -89,4 +122,6 @@
     }
   }
 }
+
+
 

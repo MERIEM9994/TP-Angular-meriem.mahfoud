@@ -1,20 +1,53 @@
-<!-- src/app/product-details/product-details.component.html -->
-<div *ngIf="loading" class="loading">Chargement...</div>
-
-<div *ngIf="product" class="product-details">
-  <div class="image-container">
-    <img [src]="'assets/images/' + product.image" [alt]="product.title">
+@if (loading) {
+  <div class="loading-container">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Chargement du produit...</p>
   </div>
-  <div class="info">
-    <h2>{{ product.title }}</h2>
-    <p class="price">{{ product.price | currency:'EUR' }}</p>
-    <p class="category">Catégorie: {{ product.category }}</p>
-    <button routerLink="/catalog" class="back-btn">Retour au catalogue</button>
+} @else if (error) {
+  <div class="error-container">
+    <span class="error-icon">⚠️</span>
+    <p class="error-message">{{ error }}</p>
+    <a routerLink="/catalog" class="back-btn">
+      Retour au catalogue
+    </a>
   </div>
-</div>
+} @else if (product) {
+  <div class="product-details">
+    <div class="product-gallery">
+      <img [src]="getImageUrl(product.image)"
+           [alt]="product.title + ' - Image produit'"
+           (error)="handleImageError($event)"
+           [class.disabled-img]="product.quantity === 0"
+           class="main-image">
+    </div>
 
-<div *ngIf="!product && !loading" class="not-found">
-  Produit non trouvé
-</div>
+    <div class="product-info">
+      <h1 class="product-title">{{ product.title }}</h1>
+      
+      <div class="price-section">
+        <span class="price">{{ product.price | currency:'EUR':'symbol':'1.2-2':'fr' }}</span>
+        @if (product.quantity < 10) {
+          <span class="stock-badge" [class.out]="product.quantity === 0">
+            {{ product.quantity === 0 ? 'RUPTURE' : 'STOCK FAIBLE' }}
+          </span>
+        }
+      </div>
 
-  
+      <div class="description">
+        <h3>Description</h3>
+        <p>{{ product.description }}</p>
+      </div>
+
+      <div class="stock-section" [class.out]="product.quantity === 0">
+        <span class="stock-label">Disponibilité :</span>
+        <span class="stock-value">
+          {{ product.quantity || 0 }} unité(s)
+        </span>
+      </div>
+
+      <a routerLink="/catalog" class="back-btn">
+        &larr; Retour au catalogue
+      </a>
+    </div>
+  </div>
+}
