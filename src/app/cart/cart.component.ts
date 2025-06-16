@@ -36,4 +36,3 @@ export class CartComponent {
     this.clear(); // Facultatif : vide le panier après commande
   }
 }
-

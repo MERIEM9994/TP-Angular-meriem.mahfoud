@@ -41,12 +41,12 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   getImageUrl(imageName: string): string {
-    return `http://localhost:3000/images/${imageName || 'placeholder.png'}`;
+    return `http://localhost:3000/assets/images/${imageName || 'placeholder.png'}`;
   }
 
   handleImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    img.src = 'http://localhost:3000/images/placeholder.png';
+    img.src = 'http://localhost:3000/assets/images/placeholder.png';
   }
 
   ajouterAuPanier(): void {

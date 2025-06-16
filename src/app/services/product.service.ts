@@ -24,6 +24,22 @@ export class ProductService {
     );
   }
 
+  decreaseStock(productId: number, quantity: number): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/products/${productId}/stock`, { quantity }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // ✅ Détection de stock bas
+  isLowStock(product: Product, threshold: number = 3): boolean {
+    return product.quantity <= threshold && product.quantity > 0;
+  }
+
+  // ✅ Détection de rupture
+  isOutOfStock(product: Product): boolean {
+    return product.quantity === 0;
+  }
+
   private transformProduct(product: any): Product {
     return {
       id: product.id,
@@ -55,10 +71,9 @@ export class ProductService {
 
   private handleError(error: any): Observable<never> {
     console.error('Erreur API:', error);
-    const userMessage = error.error?.message || 
-                       error.message || 
-                       'Une erreur est survenue. Veuillez réessayer plus tard.';
+    const userMessage = error.error?.message ||
+                        error.message ||
+                        'Une erreur est survenue. Veuillez réessayer plus tard.';
     return throwError(() => new Error(userMessage));
   }
 }
-

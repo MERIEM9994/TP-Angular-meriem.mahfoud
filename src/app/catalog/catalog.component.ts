@@ -22,16 +22,23 @@ export class CatalogComponent implements OnInit {
   }
 
   loadProducts(): void {
+    this.loading = true;
+    this.error = null;
+    
     this.productService.getProducts().subscribe({
       next: (products) => {
-        this.products = products;
+        console.log('Products loaded:', products); // Debug log
+        if (!Array.isArray(products) || products.length === 0) {
+          this.error = 'Aucun produit disponible';
+        } else {
+          this.products = products;
+        }
         this.loading = false;
-        this.error = null;
       },
       error: (err) => {
+        console.error('Error loading products:', err);
         this.error = 'Échec du chargement. Vérifiez votre connexion et réessayez.';
         this.loading = false;
-        console.error('Erreur:', err);
         // Relance automatique du chargement après 3 secondes
         setTimeout(() => this.loadProducts(), 3000);
       }
@@ -40,7 +47,7 @@ export class CatalogComponent implements OnInit {
 
   // URL des images corrigée, plus "assets" mais juste "/images"
   getImageUrl(imageName: string): string {
-    return `http://localhost:3000/images/${imageName || 'placeholder.png'}`;
+    return `http://localhost:3000/assets/images/${imageName || 'placeholder.png'}`;
   }
 
   handleImageError(event: Event): void {
