@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ProductService } from '../services/product.service';
 import { Product } from '../models/product.model';
+import { CartService } from '../cart/cart.service';
 
 @Component({
   standalone: true,
@@ -15,10 +16,9 @@ export class ProductDetailsComponent implements OnInit {
   loading = true;
   error: string | null = null;
 
-  constructor(
-    private route: ActivatedRoute,
-    private productService: ProductService
-  ) {}
+  private route = inject(ActivatedRoute);
+  private productService = inject(ProductService);
+  private cartService = inject(CartService);
 
   ngOnInit(): void {
     const id = this.route.snapshot.params['id'];
@@ -41,11 +41,18 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   getImageUrl(imageName: string): string {
-    return `http://localhost:3000/assets/images/${imageName || 'placeholder.png'}`;
+    return `http://localhost:3000/images/${imageName || 'placeholder.png'}`;
   }
 
   handleImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    img.src = 'http://localhost:3000/assets/images/placeholder.png';
+    img.src = 'http://localhost:3000/images/placeholder.png';
+  }
+
+  ajouterAuPanier(): void {
+    if (this.product) {
+      this.cartService.addToCart(this.product, 1);
+      alert(`${this.product.title} a été ajouté au panier.`);
+    }
   }
 }

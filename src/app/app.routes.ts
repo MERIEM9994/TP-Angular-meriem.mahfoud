@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { CatalogComponent } from './catalog/catalog.component';
 import { ProductDetailsPageComponent } from './product-details-page/product-details-page.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
+import { CartComponent } from './cart/cart.component'; // ✅ Import du composant panier
 
 export const routes: Routes = [
   { 
@@ -21,6 +22,11 @@ export const routes: Routes = [
     title: 'Catalogue' 
   },
   { 
+    path: 'cart', 
+    component: CartComponent,
+    title: 'Mon Panier' 
+  },
+  { 
     path: '', 
     redirectTo: '/catalog', 
     pathMatch: 'full' 
@@ -31,3 +37,4 @@ export const routes: Routes = [
     title: 'Page non trouvée' 
   }
 ];
+

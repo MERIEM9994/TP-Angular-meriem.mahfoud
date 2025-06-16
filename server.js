@@ -14,7 +14,7 @@ const API_BASE = `/api/${API_VERSION}`;
 // MIDDLEWARES
 // ======================
 app.use(cors({
-  origin: 'http://localhost:4200',
+  origin: 'http://localhost:4200', // Angular
   methods: ['GET', 'POST']
 }));
 
@@ -98,7 +98,6 @@ const products = [
   }
 ];
 
-
 // ======================
 // ROUTES API
 // ======================
@@ -106,12 +105,12 @@ app.get('/', (req, res) => {
   res.send(`API e-commerce fonctionnelle (Version ${API_VERSION})`);
 });
 
-// Route pour récupérer la liste des produits au format { data: [...] }
+// Liste produits (format { data: [...] })
 app.get(`${API_BASE}/products`, (req, res) => {
   res.json({ data: products });
 });
 
-// Route pour récupérer un produit par son ID
+// Détails produit par ID
 app.get(`${API_BASE}/products/:id(\\d+)`, (req, res) => {
   const id = parseInt(req.params.id, 10);
   const product = products.find(p => p.id === id);
@@ -123,9 +122,11 @@ app.get(`${API_BASE}/products/:id(\\d+)`, (req, res) => {
 });
 
 // ======================
-// GESTION DES ASSETS
+// SERVIR LES IMAGES STATIQUES
 // ======================
-app.use('/assets/images', express.static(path.join(__dirname, 'src/assets/images'), {
+// Les images sont dans dossier 'public/images'
+// Elles seront accessibles via URL '/assets/images'
+app.use('/assets/images', express.static(path.join(__dirname, 'public/images'), {
   maxAge: '1d',
   fallthrough: false
 }));
@@ -146,8 +147,7 @@ app.use((req, res) => {
 app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ 
-    error: 'Erreur serveur interne',
-    requestId: req.id 
+    error: 'Erreur serveur interne'
   });
 });
 
@@ -155,10 +155,11 @@ app.use((err, req, res, next) => {
 // LANCEMENT DU SERVEUR
 // ======================
 app.listen(PORT, () => {
-  console.log(`\n🛒 Serveur e-commerce démarré sur http://localhost:${PORT}`);
-  console.log(`\nEndpoints disponibles:`);
+  console.log(`🛒 Serveur e-commerce démarré sur http://localhost:${PORT}`);
+  console.log(`Endpoints disponibles :`);
   console.log(`➡️  ${API_BASE}/products - Liste des produits`);
   console.log(`➡️  ${API_BASE}/products/:id - Détails d'un produit`);
-  console.log(`\n📁 Assets statiques: http://localhost:${PORT}/assets/images/[nom-image]`);
+  console.log(`📁 Assets statiques : http://localhost:${PORT}/assets/images/[nom-image]`);
 });
+
 

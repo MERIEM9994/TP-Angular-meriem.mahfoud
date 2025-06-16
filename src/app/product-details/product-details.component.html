@@ -3,8 +3,8 @@
   <p class="loading-text">Chargement du produit...</p>
 </div>
 
-<div *ngIf="!loading && error" class="error-container">
-  <span class="error-icon">⚠️</span>
+<div *ngIf="!loading && error" class="error-container" aria-live="polite">
+  <span class="error-icon" aria-hidden="true">⚠️</span>
   <p class="error-message">{{ error }}</p>
   <a routerLink="/catalog" class="back-btn">
     Retour au catalogue
@@ -48,6 +48,15 @@
         {{ product.quantity || 0 }} unité(s)
       </span>
     </div>
+
+    <button
+      type="button"
+      (click)="ajouterAuPanier()"
+      [disabled]="product.quantity === 0"
+      class="add-to-cart-btn"
+    >
+      Ajouter au panier 🛒
+    </button>
 
     <a routerLink="/catalog" class="back-btn">
       &larr; Retour au catalogue
