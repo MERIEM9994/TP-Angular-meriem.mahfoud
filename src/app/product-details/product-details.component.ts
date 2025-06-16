@@ -28,27 +28,22 @@ export class ProductDetailsComponent implements OnInit {
   loadProduct(id: string): void {
     this.productService.getProductById(+id).subscribe({
       next: (product) => {
-        this.product = {
-          ...product,
-          image: product.image?.trim() || 'placeholder.png'
-        };
+        this.product = product;
         this.loading = false;
       },
       error: (err) => {
         this.error = err.message || 'Impossible de charger les détails du produit';
         this.loading = false;
-        console.error('Erreur:', err);
       }
     });
   }
 
   getImageUrl(imageName: string): string {
-    return `/assets/images/${imageName}?t=${Date.now()}`;
+    return `assets/images/${imageName || 'placeholder.png'}`;
   }
 
   handleImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    img.src = '/assets/images/placeholder.png';
-    img.style.opacity = '0.7';
+    img.src = 'assets/images/placeholder.png';
   }
 }

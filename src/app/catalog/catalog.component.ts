@@ -24,34 +24,28 @@ export class CatalogComponent implements OnInit {
   loadProducts(): void {
     this.productService.getProducts().subscribe({
       next: (products) => {
-        this.products = products.map(p => ({
-          ...p,
-          quantity: +p.quantity || 0,
-          image: p.image?.trim() || 'placeholder.png'
-        }));
+        this.products = products;
         this.loading = false;
       },
       error: (err) => {
         this.error = 'Échec du chargement. Vérifiez votre connexion et réessayez.';
         this.loading = false;
         console.error('Erreur:', err);
-        setTimeout(() => this.loadProducts(), 3000); // Réessai automatique après 3s
+        setTimeout(() => this.loadProducts(), 3000);
       }
     });
   }
 
   getImageUrl(imageName: string): string {
-    // Solution robuste pour le cache et les images manquantes
-    return imageName ? `/assets/images/${imageName}?t=${Date.now()}` : '/assets/images/placeholder.png';
+    return `assets/images/${imageName || 'placeholder.png'}`;
   }
 
   handleImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
-    img.src = '/assets/images/placeholder.png';
+    img.src = 'assets/images/placeholder.png';
     img.style.opacity = '0.7';
   }
 
-  // Nouvelle méthode unifiée pour le statut du stock
   getStockStatus(quantity: number): {
     cardClass: string;
     stockClass: string;
@@ -64,4 +58,3 @@ export class CatalogComponent implements OnInit {
     };
   }
 }
-

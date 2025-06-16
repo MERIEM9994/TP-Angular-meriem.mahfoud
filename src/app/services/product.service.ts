@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators'; // Import manquant ajouté ici
+import { catchError, map } from 'rxjs/operators';
 import { Product } from '../models/product.model';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService {
-  private readonly apiUrl = 'http://localhost:3000/api/v1'; // Correspond à la version de l'API
+  private readonly apiUrl = 'http://localhost:3000/api/v1';
 
   constructor(private http: HttpClient) { }
 
@@ -28,13 +28,32 @@ export class ProductService {
     return products.map(product => this.transformProduct(product));
   }
 
-  private transformProduct(product: Product): Product {
+  private transformProduct(product: any): Product {
     return {
-      ...product,
+      id: product.id,
+      title: product.name || product.title,
+      image: this.getValidImageName(product.image),
+      price: product.price,
       quantity: product.quantity || 0,
-      image: product.image?.trim() || 'placeholder.png',
-      // Ajoutez d'autres transformations si nécessaire
+      description: product.description || 'Description non disponible',
+      category: product.category || 'non-catégorisé'
     };
+  }
+
+  private getValidImageName(imagePath: string): string {
+    const availableImages = [
+      'samsung-qled-65.png',
+      'apple-airpods-max.png',
+      'apple-ipad-pro-12-9.png',
+      'iphone-14-pro.png',
+      'iphone-15-pro.png',
+      'samsung-a53.png',
+      'sonyxm5.png',
+      'tab.png'
+    ];
+    
+    const fileName = imagePath?.split('/').pop()?.trim() || '';
+    return availableImages.includes(fileName) ? fileName : 'placeholder.png';
   }
 
   private handleError(error: any): Observable<never> {

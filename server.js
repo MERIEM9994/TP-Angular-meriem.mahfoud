@@ -3,154 +3,162 @@ const cors = require('cors');
 const path = require('path');
 const app = express();
 
-// Configuration
-const PORT = process.env.PORT || 3000;
-const API_BASE = '/api/v1';
+// ======================
+// CONFIGURATION
+// ======================
+const PORT = 3000;
+const API_VERSION = 'v1';
+const API_BASE = `/api/${API_VERSION}`;
 
-// Middleware sécurisé
+// ======================
+// MIDDLEWARES
+// ======================
 app.use(cors({
-  origin: ['http://localhost:4200'],
-  methods: ['GET']
+  origin: 'http://localhost:4200',
+  methods: ['GET', 'POST']
 }));
+
 app.use(express.json({ limit: '10kb' }));
 
-// Serve les fichiers statiques
-app.use('/assets', express.static(path.join(__dirname, '../src/assets'), {
-  maxAge: '1d'
-}));
-
-// Middleware de log
-app.use((req, res, next) => {
-  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-  next();
-});
-
-// Requête racine
-app.get('/', (req, res) => {
-  res.send('Bienvenue sur l\'API produits !');
-});
-
-// Requête favicon
-app.get('/favicon.ico', (req, res) => res.status(204).end());
-
-// Données des produits
+// ======================
+// DONNÉES PRODUITS
+// ======================
 const products = [
   {
     id: 1,
-    title: "Tablette Samsung 12 Pouces",
-    image: "samsung-tab-12.png",
-    category: "tablette",
-    price: 2334,
-    quantity: 5,
-    description: "Tablette haut de gamme avec écran AMOLED",
-    createdAt: new Date('2023-01-15')
+    name: 'Samsung Galaxy A53',
+    price: 349.99,
+    quantity: 25,
+    image: 'samsung-a53.png',
+    category: 'smartphone',
+    description: 'Smartphone Android avec écran 6.5" AMOLED et quadruple caméra'
   },
   {
     id: 2,
-    title: "iPhone 14 Pro",
-    image: "iphone-14-pro.png",
-    category: "smartphone",
-    price: 1200,
-    quantity: 10,
-    description: "Dernier modèle iPhone 14 Pro avec écran Super Retina",
-    createdAt: new Date('2024-04-01')
+    name: 'Samsung Galaxy S22 Ultra',
+    price: 1199.99,
+    quantity: 12,
+    image: 's22-ultra.jpg',
+    category: 'smartphone',
+    description: 'Flagship avec S-Pen, écran 6.8" Dynamic AMOLED 2X'
   },
   {
     id: 3,
-    title: "iPhone 15 Pro",
-    image: "iphone-15-pro.png",
-    category: "smartphone",
-    price: 1500,
-    quantity: 7,
-    description: "Nouveau iPhone 15 Pro avec processeur A17 et améliorations caméra",
-    createdAt: new Date('2024-09-10')
+    name: 'Samsung Galaxy S21',
+    price: 699.99,
+    quantity: 8,
+    image: 's21.png',
+    category: 'smartphone',
+    description: 'Écran 6.2" 120Hz, triple caméra avec zoom spatial'
   },
   {
     id: 4,
-    title: "Samsung Galaxy A53",
-    image: "samsung-a53.png",
-    category: "smartphone",
-    price: 450,
-    quantity: 12,
-    description: "Smartphone milieu de gamme avec excellent rapport qualité/prix",
-    createdAt: new Date('2023-10-05')
+    name: 'iPad Air',
+    price: 599.99,
+    quantity: 15,
+    image: 'ipad-air.png',
+    category: 'tablette',
+    description: 'Tablette Apple avec puce M1 et écran Liquid Retina 10.9"'
   },
   {
     id: 5,
-    title: "Sony WH1000XM5",
-    image: "sony-wh1000xm5.png",
-    category: "casque-audio",
-    price: 350,
-    quantity: 8,
-    description: "Casque audio Bluetooth à réduction de bruit premium",
-    createdAt: new Date('2024-01-20')
+    name: 'iPhone 15 Pro',
+    price: 999.99,
+    quantity: 10,
+    image: 'iphone15-pro.png',
+    category: 'smartphone',
+    description: 'Titane aerospace-grade, A17 Pro, caméra 48MP'
+  },
+  {
+    id: 6,
+    name: 'TV Samsung QLED 4K',
+    price: 899.99,
+    quantity: 5,
+    image: 'samsung-tv.png',
+    category: 'télévision',
+    description: 'Ecran 55" avec Quantum HDR et Alexa intégrée'
+  },
+  {
+    id: 7,
+    name: 'Casque Sony WH-1000XM5',
+    price: 399.99,
+    quantity: 30,
+    image: 'sony-headphones.png',
+    category: 'casque',
+    description: "Réduction de bruit optimale, 30h d'autonomie"
+  },
+  {
+    id: 8,
+    name: 'AirPods Max',
+    price: 549.99,
+    quantity: 20,
+    image: 'airpods-max.png',
+    category: 'casque',
+    description: 'Casque Apple avec audio spatial et annulation active de bruit'
   }
 ];
 
 
-// Helper pour valider les IDs
-const isValidId = (id) => !isNaN(parseInt(id));
+// ======================
+// ROUTES API
+// ======================
+app.get('/', (req, res) => {
+  res.send(`API e-commerce fonctionnelle (Version ${API_VERSION})`);
+});
 
-// Routes API
+// Route pour récupérer la liste des produits au format { data: [...] }
 app.get(`${API_BASE}/products`, (req, res) => {
-  try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
+  res.json({ data: products });
+});
 
-    const results = {
-      total: products.length,
-      page,
-      limit,
-      data: products.slice(startIndex, endIndex)
-    };
-
-    res.json(results);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Erreur serveur' });
+// Route pour récupérer un produit par son ID
+app.get(`${API_BASE}/products/:id(\\d+)`, (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const product = products.find(p => p.id === id);
+  if (product) {
+    res.json(product);
+  } else {
+    res.status(404).json({ error: `Produit avec ID ${id} non trouvé` });
   }
 });
 
-app.get(`${API_BASE}/products/:id`, (req, res) => {
-  try {
-    if (!isValidId(req.params.id)) {
-      return res.status(400).json({ error: 'ID de produit invalide' });
-    }
+// ======================
+// GESTION DES ASSETS
+// ======================
+app.use('/assets/images', express.static(path.join(__dirname, 'src/assets/images'), {
+  maxAge: '1d',
+  fallthrough: false
+}));
 
-    const product = products.find(p => p.id === parseInt(req.params.id));
-    if (!product) {
-      return res.status(404).json({ error: 'Produit non trouvé' });
-    }
-
-    const productWithStats = {
-      ...product,
-      isNew: new Date() - new Date(product.createdAt) < 30 * 24 * 60 * 60 * 1000
-    };
-
-    res.json(productWithStats);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Erreur serveur' });
-  }
-});
-
-// Gestion des erreurs 404
+// ======================
+// GESTION DES ERREURS
+// ======================
 app.use((req, res) => {
-  res.status(404).json({ error: 'Endpoint non trouvé' });
+  res.status(404).json({ 
+    error: 'Endpoint non trouvé',
+    availableEndpoints: [
+      `${API_BASE}/products`,
+      `${API_BASE}/products/:id`
+    ]
+  });
 });
 
-// Gestion des erreurs globales
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ error: 'Erreur serveur' });
+  res.status(500).json({ 
+    error: 'Erreur serveur interne',
+    requestId: req.id 
+  });
 });
 
-// Démarrer le serveur
+// ======================
+// LANCEMENT DU SERVEUR
+// ======================
 app.listen(PORT, () => {
-  console.log(`\nServeur API démarré sur http://localhost:${PORT}`);
-  console.log(`Endpoints disponibles:`);
-  console.log(`- GET ${API_BASE}/products`);
-  console.log(`- GET ${API_BASE}/products/:id\n`);
+  console.log(`\n🛒 Serveur e-commerce démarré sur http://localhost:${PORT}`);
+  console.log(`\nEndpoints disponibles:`);
+  console.log(`➡️  ${API_BASE}/products - Liste des produits`);
+  console.log(`➡️  ${API_BASE}/products/:id - Détails d'un produit`);
+  console.log(`\n📁 Assets statiques: http://localhost:${PORT}/assets/images/[nom-image]`);
 });
+
