@@ -12,7 +12,7 @@ export class ProductService {
 
   getProducts(): Observable<Product[]> {
     return this.http.get<{ data: Product[] }>(`${this.apiUrl}/products`).pipe(
-      map(response => this.transformProducts(response.data)),
+      map(response => response.data.map(product => this.transformProduct(product))),
       catchError(this.handleError)
     );
   }
@@ -24,14 +24,10 @@ export class ProductService {
     );
   }
 
-  private transformProducts(products: Product[]): Product[] {
-    return products.map(product => this.transformProduct(product));
-  }
-
   private transformProduct(product: any): Product {
     return {
       id: product.id,
-      title: product.name || product.title,
+      title: product.name, // nom utilisé dans backend
       image: this.getValidImageName(product.image),
       price: product.price,
       quantity: product.quantity || 0,
@@ -42,17 +38,18 @@ export class ProductService {
 
   private getValidImageName(imagePath: string): string {
     const availableImages = [
-      'samsung-qled-65.png',
-      'apple-airpods-max.png',
-      'apple-ipad-pro-12-9.png',
-      'iphone-14-pro.png',
-      'iphone-15-pro.png',
       'samsung-a53.png',
-      'sonyxm5.png',
-      'tab.png'
+      's22-ultra.jpg',
+      's21.png',
+      'ipad-air.png',
+      'iphone15-pro.png',
+      'samsung-tv.png',
+      'sony-headphones.png',
+      'airpods-max.png',
+      'placeholder.png'
     ];
-    
-    const fileName = imagePath?.split('/').pop()?.trim() || '';
+
+    const fileName = imagePath?.split('/').pop()?.trim() || 'placeholder.png';
     return availableImages.includes(fileName) ? fileName : 'placeholder.png';
   }
 
@@ -64,3 +61,4 @@ export class ProductService {
     return throwError(() => new Error(userMessage));
   }
 }
+
