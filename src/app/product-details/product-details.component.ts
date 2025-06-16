@@ -39,8 +39,9 @@ export class ProductDetailsComponent implements OnInit {
   }
 
   getImageUrl(imageName: string): string {
-    return `assets/images/${imageName || 'placeholder.png'}`;
-  }
+  return `http://localhost:3000/assets/images/${imageName || 'placeholder.png'}`;
+}
+
 
   handleImageError(event: Event): void {
     const img = event.target as HTMLImageElement;

@@ -37,14 +37,15 @@ export class CatalogComponent implements OnInit {
   }
 
   getImageUrl(imageName: string): string {
-    return `assets/images/${imageName || 'placeholder.png'}`;
-  }
+  return `http://localhost:3000/assets/images/${imageName || 'placeholder.png'}`;
+}
+
 
   handleImageError(event: Event): void {
-    const img = event.target as HTMLImageElement;
-    img.src = 'assets/images/placeholder.png';
-    img.style.opacity = '0.7';
-  }
+  const img = event.target as HTMLImageElement;
+  img.src = 'http://localhost:3000/assets/images/placeholder.png';
+  img.style.opacity = '0.7';
+}
 
   getStockStatus(quantity: number): {
     cardClass: string;
