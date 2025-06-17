@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router } from '@angular/router';
 import { ProductService } from '../services/product.service';
 import { Product } from '../models/product.model';
 import { CartService } from '../cart/cart.service';
@@ -18,7 +18,8 @@ export class CatalogComponent implements OnInit {
 
   constructor(
     private productService: ProductService,
-    private cartService: CartService
+    private cartService: CartService,
+    private router: Router // <== Ajout du Router
   ) {}
 
   ngOnInit(): void {
@@ -72,11 +73,15 @@ export class CatalogComponent implements OnInit {
   addToCart(product: Product): void {
     if (product.quantity > 0) {
       this.cartService.addToCart(product);
-      alert(`${product.title} ajouté au panier 🛒`);
+      const confirmed = confirm(`${product.title} a été ajouté au panier 🛒\nSouhaitez-vous consulter votre panier ?`);
+      if (confirmed) {
+        this.router.navigate(['/cart']);
+      }
     } else {
       alert(`Le produit "${product.title}" est en rupture de stock !`);
     }
   }
 }
+
 
 

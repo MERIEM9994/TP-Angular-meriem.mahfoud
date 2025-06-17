@@ -8,7 +8,9 @@
 <div *ngIf="!loading && error" class="error-container" role="alert" aria-live="assertive">
   <span class="error-icon" aria-hidden="true">⚠️</span>
   <p class="error-message">{{ error }}</p>
-  <a routerLink="/catalog" class="btn btn-back">Retour au catalogue</a>
+  <a routerLink="/catalog" class="btn btn-success">
+    Retour au catalogue
+  </a>
 </div>
 
 <!-- Section Détail produit -->
@@ -63,15 +65,19 @@
       type="button"
       (click)="ajouterAuPanier()"
       [disabled]="product.quantity === 0"
-      class="btn btn-primary add-to-cart-btn"
+      class="btn btn-primary rounded-pill px-4 py-2 mt-3 shadow-sm"
       aria-disabled="{{product.quantity === 0}}"
     >
-      Ajouter au panier 🛒
+      🛒 Ajouter au panier
     </button>
 
-    <!-- Lien retour -->
-    <a routerLink="/catalog" class="btn btn-secondary btn-back">
+    <!-- Bouton retour -->
+    <a
+      routerLink="/catalog"
+      class="btn btn-success rounded-pill px-4 py-2 mt-2"
+    >
       &larr; Retour au catalogue
     </a>
   </div>
 </div>
+

@@ -172,54 +172,54 @@
   font-weight: 500;
 }
 
-/* ========== BUTTONS ========== */
-.add-to-cart-btn {
-  margin-top: 15px;
+/* ========== BOUTONS MODERNES ========== */
+.btn {
+  display: inline-block;
   padding: 10px 20px;
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 999px;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Bouton rose = Ajouter au panier */
+.btn-primary {
   background-color: #ff80ab;
   color: white;
-  border: none;
-  border-radius: 8px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
 }
 
-.add-to-cart-btn:hover:not(:disabled) {
+.btn-primary:hover:not(:disabled) {
   background-color: #ec407a;
+  transform: translateY(-1px);
 }
 
-.add-to-cart-btn:disabled {
+.btn-primary:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }
 
-.add-to-cart-btn:focus,
-.back-btn:focus {
-  outline: 3px solid #ff80ab;
-  outline-offset: 3px;
-}
-
-.back-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: #3f51b5;
+/* Bouton vert = Retour au catalogue */
+.btn-success {
+  background-color: #4caf50;
   color: white;
-  border: none;
-  padding: 0.8rem 1.5rem;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  text-decoration: none;
-  transition: all 0.3s ease;
 }
 
-.back-btn:hover {
-  background: #303f9f;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+.btn-success:hover {
+  background-color: #388e3c;
+  transform: translateY(-1px);
 }
+
+/* Focus accessible */
+.btn:focus {
+  outline: 3px solid #ff80ab;
+  outline-offset: 2px;
+}
+
 
 /* ========== RESPONSIVE ========== */
 @media (max-width: 768px) {

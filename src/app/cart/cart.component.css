@@ -1,14 +1,49 @@
-/* Conteneur principal */
+/* ======= Styles communs ======= */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #fff0f6; /* fond rose très clair */
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+/* ======= Page PANIER ======= */
+
+/* Titre principal */
 h2 {
   text-align: center;
   color: #d6336c; /* rose foncé */
   font-weight: 700;
   font-size: 2rem;
   margin-bottom: 1.5rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Chaque ligne d'article panier */
+/* Bouton retour au catalogue */
+.back-catalog-wrapper {
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.back-btn {
+  background-color: #28a745; /* vert */
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 25px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+.back-btn:hover,
+.back-btn:focus {
+  background-color: #218838;
+  transform: translateY(-2px);
+  outline: none;
+}
+
+/* Ligne d'article dans le panier */
 .cart-item {
   background-color: #fff0f6; /* rose très clair */
   border-radius: 12px;
@@ -19,10 +54,8 @@ h2 {
   align-items: center;
   justify-content: space-between;
   font-size: 1rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Texte dans chaque item (nom + prix + quantité) */
 .cart-item p {
   margin: 0;
   flex-grow: 1;
@@ -32,13 +65,12 @@ h2 {
   flex-wrap: wrap;
 }
 
-/* Nom produit en gras */
 .cart-item strong {
   color: #9f224e;
   min-width: 150px;
 }
 
-/* Input quantité stylé */
+/* Input quantité */
 .cart-item input[type="number"] {
   width: 60px;
   padding: 0.3rem 0.5rem;
@@ -56,7 +88,7 @@ h2 {
   outline: none;
 }
 
-/* Bouton supprimer */
+/* Bouton supprimer un article */
 .remove-btn {
   background-color: #d6336c;
   color: white;
@@ -89,7 +121,6 @@ hr {
   font-weight: 700;
   color: #9f224e;
   margin-bottom: 1.5rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Conteneur des boutons d'action */
@@ -99,7 +130,7 @@ hr {
   gap: 1rem;
 }
 
-/* Style bouton commun */
+/* Boutons vider et commander */
 .clear-btn,
 .order-btn {
   padding: 0.7rem 1.6rem;
@@ -111,10 +142,8 @@ hr {
   user-select: none;
   box-shadow: 0 4px 10px rgba(214, 51, 108, 0.3);
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Bouton vider panier */
 .clear-btn {
   background-color: #f8d7da;
   color: #721c24;
@@ -128,7 +157,6 @@ hr {
   outline: none;
 }
 
-/* Bouton commander */
 .order-btn {
   background-color: #d6336c;
   color: white;
@@ -141,7 +169,6 @@ hr {
   outline: none;
 }
 
-/* Boutons désactivés */
 .clear-btn:disabled,
 .order-btn:disabled {
   background-color: #f5c6cb;
@@ -156,9 +183,54 @@ hr {
   font-style: italic;
   color: #9f224e;
   font-weight: 600;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin-top: 2rem;
 }
+
+/* ======= Page DETAIL PRODUIT ======= */
+
+/* Conteneur des boutons dans le header de détail produit */
+.detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background-color: #fff0f6;
+  border-bottom: 1px solid #d6336c;
+  margin-bottom: 1rem;
+}
+
+/* Style commun aux boutons de navigation dans la page détail */
+.detail-header .nav-btn {
+  background-color: #d6336c; /* rose foncé */
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+  user-select: none;
+  margin-left: 0.5rem;
+  display: inline-block;
+}
+
+.detail-header .nav-btn:hover,
+.detail-header .nav-btn:focus {
+  background-color: #9f224e;
+  outline: none;
+}
+
+/* Titre de la boutique dans la page détail */
+.detail-header h1 {
+  margin: 0;
+  color: #9f224e;
+  font-weight: 700;
+  font-size: 1.8rem;
+  flex-grow: 1;
+}
+
+
 
 
 

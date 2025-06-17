@@ -1,66 +1,100 @@
-:host {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
+/* Styles globaux du header */
 .page-header {
-  background: #3f51b5;
-  color: white;
-  padding: 1rem 0;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  background-color: #f8d7e3; /* rose très clair */
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 5px rgba(182, 67, 103, 0.25);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Conteneur interne pour centrer et espacer */
 .header-content {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
+/* Titre principal */
 .page-header h1 {
-  margin: 0;
-  text-align: center;
+  color: #a13058; /* rose foncé */
+  font-weight: 700;
   font-size: 1.8rem;
+  margin: 0;
 }
 
+/* Navigation principale */
 .page-header nav {
   display: flex;
-  justify-content: center;
-  margin-top: 1rem;
+  gap: 1rem;
 }
 
-.page-header a {
+/* Styles communs aux boutons (liens) */
+.page-header a.nav-btn {
   color: white;
+  background-color: #d6336c; /* rose vif */
+  padding: 0.5rem 1.2rem;
+  border-radius: 20px;
   text-decoration: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  transition: background-color 0.3s;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 4px 8px rgba(214, 51, 108, 0.4);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
 }
 
-.page-header a:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+/* Bouton "Retour au catalogue" en rose plus doux */
+.page-header a.nav-btn:first-child {
+  background-color: #e895ac; /* rose plus clair */
+  color: #5a1b3a; /* texte foncé */
+  box-shadow: 0 4px 8px rgba(232, 149, 172, 0.4);
 }
 
-.page-header a.active {
-  background-color: rgba(255, 255, 255, 0.2);
-  font-weight: bold;
+.page-header a.nav-btn:first-child:hover,
+.page-header a.nav-btn:first-child:focus {
+  background-color: #c27087;
+  box-shadow: 0 6px 12px rgba(194, 112, 135, 0.6);
+  outline: none;
 }
 
-.page-content {
-  flex: 1;
-  padding: 2rem 0;
-  background: #f9f9f9;
+/* Bouton "Panier" en rose vif */
+.page-header a.nav-btn:last-child {
+  background-color: #d6336c;
+  color: white;
 }
 
-.page-footer {
-  text-align: center;
-  padding: 1.5rem;
-  background: #f5f5f5;
-  border-top: 1px solid #eee;
+.page-header a.nav-btn:last-child:hover,
+.page-header a.nav-btn:last-child:focus {
+  background-color: #9f224e;
+  box-shadow: 0 6px 12px rgba(159, 34, 78, 0.7);
+  outline: none;
 }
 
-@media (max-width: 768px) {
+/* Focus visible (accessibilité) */
+.page-header a.nav-btn:focus-visible {
+  outline: 3px solid #f9b3c0;
+  outline-offset: 3px;
+}
+
+/* Responsive : réduire padding et taille texte sur petits écrans */
+@media (max-width: 480px) {
+  .page-header {
+    padding: 0.8rem 1rem;
+  }
+
   .page-header h1 {
-    font-size: 1.5rem;
+    font-size: 1.4rem;
+  }
+
+  .page-header a.nav-btn {
+    font-size: 0.9rem;
+    padding: 0.4rem 1rem;
   }
 }
+

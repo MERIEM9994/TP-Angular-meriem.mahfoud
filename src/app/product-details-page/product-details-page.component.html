@@ -2,19 +2,18 @@
   <div class="header-content">
     <h1>Ma Boutique</h1>
     <nav>
-      <a routerLink="/catalog" routerLinkActive="active">
+      <a routerLink="/catalog" routerLinkActive="active" class="nav-btn">
         Retour au catalogue
       </a>
-      <a routerLink="/cart" routerLinkActive="active">Panier</a>
+      <a routerLink="/cart" routerLinkActive="active" class="nav-btn">
+        Panier
+      </a>
     </nav>
   </div>
 </header>
 
-<main class="page-content">
+<main>
   <router-outlet></router-outlet>
 </main>
 
-<footer class="page-footer">
-  <p>&copy; {{ currentYear }} Ma Boutique. Tous droits réservés.</p>
-</footer>
-  
+
