@@ -15,7 +15,7 @@ const API_BASE = `/api/${API_VERSION}`;
 // ======================
 app.use(cors({
   origin: 'http://localhost:4200', // Angular
-  methods: ['GET', 'POST']
+  methods: ['GET', 'POST', 'PATCH']  // Ajout PATCH ici pour autoriser la méthode
 }));
 
 app.use(express.json({ limit: '10kb' }));
@@ -121,11 +121,29 @@ app.get(`${API_BASE}/products/:id(\\d+)`, (req, res) => {
   }
 });
 
+// === NOUVELLE ROUTE PATCH POUR MISE À JOUR QUANTITÉ ===
+app.patch(`${API_BASE}/products/:id(\\d+)`, (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const product = products.find(p => p.id === id);
+
+  if (!product) {
+    return res.status(404).json({ error: `Produit avec ID ${id} non trouvé` });
+  }
+
+  const { quantity } = req.body;
+
+  if (typeof quantity !== 'number' || quantity < 0) {
+    return res.status(400).json({ error: 'Quantité invalide' });
+  }
+
+  product.quantity = quantity;
+
+  res.json({ message: 'Quantité mise à jour', product });
+});
+
 // ======================
 // SERVIR LES IMAGES STATIQUES
 // ======================
-// Les images sont dans dossier 'public/images'
-// Elles seront accessibles via URL '/assets/images'
 app.use('/assets/images', express.static(path.join(__dirname, 'public/images'), {
   maxAge: '1d',
   fallthrough: false
@@ -139,7 +157,8 @@ app.use((req, res) => {
     error: 'Endpoint non trouvé',
     availableEndpoints: [
       `${API_BASE}/products`,
-      `${API_BASE}/products/:id`
+      `${API_BASE}/products/:id`,
+      `${API_BASE}/products/:id (PATCH)`
     ]
   });
 });
@@ -159,7 +178,6 @@ app.listen(PORT, () => {
   console.log(`Endpoints disponibles :`);
   console.log(`➡️  ${API_BASE}/products - Liste des produits`);
   console.log(`➡️  ${API_BASE}/products/:id - Détails d'un produit`);
+  console.log(`➡️  ${API_BASE}/products/:id (PATCH) - Mise à jour quantité`);
   console.log(`📁 Assets statiques : http://localhost:${PORT}/assets/images/[nom-image]`);
 });
-
-

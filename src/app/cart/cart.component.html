@@ -1,29 +1,43 @@
 <h2>🛒 Mon panier</h2>
 
-<div class="cart-item" *ngFor="let item of cart$ | async">
-  <p>
-    <strong>{{ item.product.name }}</strong> –
-    {{ item.product.price }} € ×
-    <input type="number" [value]="item.quantity" min="1"
-           (input)="updateQuantity(item.product.id, $event)">
-    <button class="remove-btn" (click)="removeItem(item.product.id)">❌</button>
+<div *ngIf="(cart$ | async) as cartItems; else emptyCart">
+  <div class="cart-item" *ngFor="let item of cartItems">
+    <p>
+      <strong>{{ item.product.name }}</strong> – 
+      {{ item.product.price | number:'1.2-2' }} € ×
+      <input 
+        type="number" 
+        [value]="item.quantity" 
+        min="1"
+        (input)="updateQuantity(item.product.id, $event)" 
+        aria-label="Quantité pour {{ item.product.name }}"
+      >
+      <button 
+        class="remove-btn" 
+        (click)="removeItem(item.product.id)" 
+        aria-label="Supprimer {{ item.product.name }} du panier"
+      >
+        ❌
+      </button>
+    </p>
+  </div>
+
+  <hr>
+
+  <p class="total-line">
+    <strong>Total : {{ total | number:'1.2-2' }} €</strong>
   </p>
+
+  <div class="cart-actions">
+    <button class="clear-btn" (click)="clear()" [disabled]="cartItems.length === 0">Vider le panier</button>
+    <button class="order-btn" (click)="order()" [disabled]="cartItems.length === 0">✅ Commander</button>
+  </div>
 </div>
 
-<p class="empty-message" *ngIf="(cart$ | async)?.length === 0">
-  Le panier est vide.
-</p>
+<ng-template #emptyCart>
+  <p class="empty-message">Le panier est vide.</p>
+</ng-template>
 
-<hr>
-
-<p class="total-line">
-  <strong>Total : {{ total | number:'1.2-2' }} €</strong>
-</p>
-
-<div class="cart-actions">
-  <button class="clear-btn" (click)="clear()">Vider le panier</button>
-  <button class="order-btn" (click)="order()">✅ Commander</button>
-</div>
 
 
 

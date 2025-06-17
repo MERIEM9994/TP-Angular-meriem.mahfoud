@@ -12,7 +12,12 @@ export class ProductService {
 
   getProducts(): Observable<Product[]> {
     return this.http.get<{ data: Product[] }>(`${this.apiUrl}/products`).pipe(
-      map(response => response.data.map(product => this.transformProduct(product))),
+      map(response => {
+        if (!response || !response.data) {
+          throw new Error('Invalid response format');
+        }
+        return response.data.map(product => this.transformProduct(product));
+      }),
       catchError(this.handleError)
     );
   }
@@ -24,28 +29,20 @@ export class ProductService {
     );
   }
 
-  decreaseStock(productId: number, quantity: number): Observable<any> {
-    return this.http.patch(`${this.apiUrl}/products/${productId}/stock`, { quantity }).pipe(
+  // === Ajout méthode PATCH pour mise à jour quantité ===
+  updateProductQuantity(id: number, quantity: number): Observable<Product> {
+    return this.http.patch<Product>(`${this.apiUrl}/products/${id}`, { quantity }).pipe(
+      map(product => this.transformProduct(product)),
       catchError(this.handleError)
     );
-  }
-
-  // ✅ Détection de stock bas
-  isLowStock(product: Product, threshold: number = 3): boolean {
-    return product.quantity <= threshold && product.quantity > 0;
-  }
-
-  // ✅ Détection de rupture
-  isOutOfStock(product: Product): boolean {
-    return product.quantity === 0;
   }
 
   private transformProduct(product: any): Product {
     return {
       id: product.id,
-      title: product.name, // nom utilisé dans backend
+      title: product.name || 'Sans titre',
       image: this.getValidImageName(product.image),
-      price: product.price,
+      price: product.price || 0,
       quantity: product.quantity || 0,
       description: product.description || 'Description non disponible',
       category: product.category || 'non-catégorisé'
@@ -71,9 +68,10 @@ export class ProductService {
 
   private handleError(error: any): Observable<never> {
     console.error('Erreur API:', error);
-    const userMessage = error.error?.message ||
-                        error.message ||
-                        'Une erreur est survenue. Veuillez réessayer plus tard.';
+    const userMessage = error.error?.message || 
+                       error.message || 
+                       'Une erreur est survenue. Veuillez réessayer plus tard.';
     return throwError(() => new Error(userMessage));
   }
 }
+

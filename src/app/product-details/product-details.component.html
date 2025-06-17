@@ -1,17 +1,20 @@
-<div *ngIf="loading" class="loading-container">
-  <div class="loading-spinner"></div>
+<!-- Section Chargement -->
+<div *ngIf="loading" class="loading-container" role="status" aria-live="polite" aria-busy="true">
+  <div class="loading-spinner" aria-hidden="true"></div>
   <p class="loading-text">Chargement du produit...</p>
 </div>
 
-<div *ngIf="!loading && error" class="error-container" aria-live="polite">
+<!-- Section Erreur -->
+<div *ngIf="!loading && error" class="error-container" role="alert" aria-live="assertive">
   <span class="error-icon" aria-hidden="true">⚠️</span>
   <p class="error-message">{{ error }}</p>
-  <a routerLink="/catalog" class="back-btn">
-    Retour au catalogue
-  </a>
+  <a routerLink="/catalog" class="btn btn-back">Retour au catalogue</a>
 </div>
 
+<!-- Section Détail produit -->
 <div *ngIf="!loading && !error && product" class="product-details">
+
+  <!-- Galerie d'image produit -->
   <div class="product-gallery">
     <img
       [src]="getImageUrl(product.image)"
@@ -20,45 +23,54 @@
       [class.disabled-img]="product.quantity === 0"
       class="main-image"
       loading="lazy"
+      width="400"
+      height="400"
     />
   </div>
 
+  <!-- Infos produit -->
   <div class="product-info">
     <h1 class="product-title">{{ product.title }}</h1>
 
-    <div class="price-section">
+    <!-- Prix et stock -->
+    <div class="price-stock">
       <span class="price">{{ product.price | currency:'EUR':'symbol':'1.2-2':'fr' }}</span>
+      
       <span
         *ngIf="product.quantity < 10"
         class="stock-badge"
-        [class.out]="product.quantity === 0"
+        [class.out-of-stock]="product.quantity === 0"
+        [attr.aria-label]="product.quantity === 0 ? 'Rupture de stock' : 'Stock faible'"
       >
         {{ product.quantity === 0 ? 'RUPTURE' : 'STOCK FAIBLE' }}
       </span>
     </div>
 
-    <div class="description">
-      <h3>Description</h3>
+    <!-- Description -->
+    <section class="description" aria-label="Description du produit">
+      <h2>Description</h2>
       <p>{{ product.description }}</p>
-    </div>
+    </section>
 
-    <div class="stock-section" [class.out]="product.quantity === 0">
+    <!-- Disponibilité -->
+    <div class="stock-status" [class.out-of-stock]="product.quantity === 0">
       <span class="stock-label">Disponibilité :</span>
-      <span class="stock-value">
-        {{ product.quantity || 0 }} unité(s)
-      </span>
+      <span class="stock-value">{{ product.quantity || 0 }} unité(s)</span>
     </div>
 
+    <!-- Bouton ajouter au panier -->
     <button
       type="button"
       (click)="ajouterAuPanier()"
       [disabled]="product.quantity === 0"
-      class="add-to-cart-btn"
+      class="btn btn-primary add-to-cart-btn"
+      aria-disabled="{{product.quantity === 0}}"
     >
       Ajouter au panier 🛒
     </button>
 
-    <a routerLink="/catalog" class="back-btn">
+    <!-- Lien retour -->
+    <a routerLink="/catalog" class="btn btn-secondary btn-back">
       &larr; Retour au catalogue
     </a>
   </div>

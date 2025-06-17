@@ -1,60 +1,71 @@
 <div class="catalog">
-  <h1 >Our products List</h1>
+  <h1>✨ Nos produits</h1>
 
-  @if (loading) {
-    <div class="loading-spinner">
-      <div class="spinner"></div>
-      <p>Chargement en cours...</p>
-    </div>
-  } @else if (error) {
-    <div class="error-alert">
-      <span class="error-icon">⚠️</span>
-      <p>{{ error }}</p>
-      <button (click)="loadProducts()" class="reload-btn">
-        <span class="reload-icon">⟳</span> Recharger
-      </button>
-    </div>
-  } @else {
-    <div class="products-grid">
-      @for (product of products; track product.id) {
-        <div class="product-card"
+  <!-- Spinner -->
+  <div *ngIf="loading" class="loading-spinner">
+    <div class="spinner"></div>
+    <p>Chargement en cours...</p>
+  </div>
+
+  <!-- Erreur de chargement -->
+  <div *ngIf="error && !loading" class="error-alert">
+    <span class="error-icon">⚠️</span>
+    <p>{{ error }}</p>
+    <button (click)="loadProducts()" class="reload-btn">
+      <span class="reload-icon">⟳</span> Recharger
+    </button>
+  </div>
+
+  <!-- Catalogue -->
+  <div *ngIf="!loading && !error" class="products-grid">
+    <div *ngFor="let product of products; trackBy: trackById"
+         class="product-card"
+         [class.out-of-stock]="product.quantity === 0"
+         [class.low-stock]="product.quantity < 10 && product.quantity > 0"
+         [attr.data-id]="product.id">
+
+      <!-- Image produit -->
+      <div class="img-container">
+        <img [src]="getImageUrl(product.image)"
+             [alt]="product.title"
+             (error)="handleImageError($event)"
+             [class.disabled-img]="product.quantity === 0"
+             loading="lazy" />
+      </div>
+
+      <!-- Détails -->
+      <div class="details">
+        <h3 class="product-title">{{ product.title }}</h3>
+        <p class="price">{{ product.price | currency:'EUR':'symbol' }}</p>
+
+        <!-- Stock -->
+        <div class="stock-info"
              [class.out-of-stock]="product.quantity === 0"
-             [class.low-stock]="product.quantity < 10 && product.quantity > 0"
-             [attr.data-id]="product.id">
-          
-          <div class="img-container">
-            <img [src]="getImageUrl(product.image)"
-                 [alt]="product.title + ' image'"
-                 (error)="handleImageError($event)"
-                 [class.disabled-img]="product.quantity === 0"
-                 loading="lazy">
-          </div>
-
-          <div class="details">
-            <h3 class="product-title">{{ product.title }}</h3>
-            <p class="price">{{ product.price | currency:'EUR':'symbol':'1.2-2':'fr' }}</p>
-
-            <div class="stock-info"
-                 [class.out-of-stock]="product.quantity === 0"
-                 [class.low-stock]="product.quantity < 10 && product.quantity > 0">
-              <span class="stock-label">Stock:</span>
-              <span class="stock-quantity">{{ product.quantity }}</span>
-              @if (product.quantity < 10) {
-                <span class="stock-warning">
-                  ({{ product.quantity === 0 ? 'Rupture' : 'Stock faible' }})
-                </span>
-              }
-            </div>
-
-            <a [routerLink]="['/products', product.id]"
-               class="details-btn"
-               [class.disabled]="product.quantity === 0"
-               [attr.aria-disabled]="product.quantity === 0 ? 'true' : 'false'">
-              {{ product.quantity === 0 ? 'Indisponible' : 'Voir détails' }}
-            </a>
-          </div>
+             [class.low-stock]="product.quantity < 10 && product.quantity > 0">
+          <span class="stock-label">Stock :</span>
+          <span class="stock-quantity">{{ product.quantity }}</span>
+          <span *ngIf="product.quantity < 10" class="stock-warning">
+            ({{ product.quantity === 0 ? 'Rupture' : 'Stock faible' }})
+          </span>
         </div>
-      }
+
+        <!-- Bouton Voir détails -->
+        <a [routerLink]="['/products', product.id]"
+           class="details-btn"
+           [class.disabled]="product.quantity === 0"
+           [attr.aria-disabled]="product.quantity === 0 ? 'true' : 'false'">
+          {{ product.quantity === 0 ? 'Indisponible' : 'Voir détails' }}
+        </a>
+
+        <!-- Bouton Ajouter au panier -->
+        <button *ngIf="product.quantity > 0"
+                class="add-to-cart-btn"
+                (click)="addToCart(product)">
+          🛒 Ajouter au panier
+        </button>
+      </div>
     </div>
-  }
+  </div>
 </div>
+
+

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ProductService } from '../services/product.service';
 import { Product } from '../models/product.model';
+import { CartService } from '../cart/cart.service';
 
 @Component({
   standalone: true,
@@ -15,7 +16,10 @@ export class CatalogComponent implements OnInit {
   loading = true;
   error: string | null = null;
 
-  constructor(private productService: ProductService) {}
+  constructor(
+    private productService: ProductService,
+    private cartService: CartService
+  ) {}
 
   ngOnInit(): void {
     this.loadProducts();
@@ -24,10 +28,9 @@ export class CatalogComponent implements OnInit {
   loadProducts(): void {
     this.loading = true;
     this.error = null;
-    
+
     this.productService.getProducts().subscribe({
       next: (products) => {
-        console.log('Products loaded:', products); // Debug log
         if (!Array.isArray(products) || products.length === 0) {
           this.error = 'Aucun produit disponible';
         } else {
@@ -36,16 +39,14 @@ export class CatalogComponent implements OnInit {
         this.loading = false;
       },
       error: (err) => {
-        console.error('Error loading products:', err);
+        console.error('Erreur chargement produits:', err);
         this.error = 'Échec du chargement. Vérifiez votre connexion et réessayez.';
         this.loading = false;
-        // Relance automatique du chargement après 3 secondes
         setTimeout(() => this.loadProducts(), 3000);
       }
     });
   }
 
-  // URL des images corrigée, plus "assets" mais juste "/images"
   getImageUrl(imageName: string): string {
     return `http://localhost:3000/assets/images/${imageName || 'placeholder.png'}`;
   }
@@ -60,12 +61,22 @@ export class CatalogComponent implements OnInit {
     return {
       cardClass: quantity === 0 ? 'out-of-stock' : quantity < 10 ? 'low-stock' : '',
       stockClass: quantity === 0 ? 'out' : quantity < 10 ? 'low' : '',
-      label: quantity === 0 ? 'Rupture' : quantity < 10 ? 'Faible' : ''
+      label: quantity === 0 ? 'Rupture' : quantity < 10 ? 'Stock faible' : ''
     };
   }
 
   trackById(index: number, product: Product): number {
     return product.id;
   }
+
+  addToCart(product: Product): void {
+    if (product.quantity > 0) {
+      this.cartService.addToCart(product);
+      alert(`${product.title} ajouté au panier 🛒`);
+    } else {
+      alert(`Le produit "${product.title}" est en rupture de stock !`);
+    }
+  }
 }
+
 

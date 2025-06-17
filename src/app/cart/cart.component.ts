@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CartService } from './cart.service';
+import { CartService, CartItem } from './cart.service';
 
 @Component({
   selector: 'app-cart',
@@ -23,16 +23,24 @@ export class CartComponent {
 
   updateQuantity(id: number, event: Event) {
     const quantity = +(event.target as HTMLInputElement).value;
-    this.cartService.updateQuantity(id, quantity);
+    if (quantity < 1) {
+      this.cartService.removeFromCart(id);
+    } else {
+      this.cartService.updateQuantity(id, quantity);
+    }
   }
 
   clear() {
     this.cartService.clearCart();
   }
 
-  // ✅ La méthode à ajouter :
   order() {
-    alert("✅ Merci pour votre commande !");
-    this.clear(); // Facultatif : vide le panier après commande
+    this.cartService.checkout()
+      .then(() => {
+        alert("✅ Merci pour votre commande !");
+      })
+      .catch(err => {
+        alert("❌ Erreur lors de la commande : " + err.message);
+      });
   }
 }
