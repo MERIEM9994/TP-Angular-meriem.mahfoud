@@ -41,7 +41,8 @@
 
 <ng-template #emptyCart>
   <p class="empty-message">Le panier est vide.</p>
-  <a routerLink="/catalog" class="back-btn">← Voir le catalogue</a>
+  <button (click)="goToCatalog()" class="back-btn">← Retour au catalogue</button>
+
 </ng-template>
 
 

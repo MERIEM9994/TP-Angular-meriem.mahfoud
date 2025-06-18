@@ -229,6 +229,10 @@ hr {
   font-size: 1.8rem;
   flex-grow: 1;
 }
+.back-btn {
+  cursor: pointer;
+}
+
 
 
 

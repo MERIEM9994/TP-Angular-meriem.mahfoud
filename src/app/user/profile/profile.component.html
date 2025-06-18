@@ -1,0 +1,16 @@
+<div class="profile-container" *ngIf="user$ | async as user; else noUser">
+  <h2>Profil Utilisateur</h2>
+  <div class="profile-info">
+    <p><strong>Nom :</strong> {{ user.name }}</p>
+    <p><strong>Email :</strong> {{ user.email }}</p>
+    <p><strong>Rôle :</strong> {{ user.role }}</p>
+  </div>
+  <button class="btn-edit" (click)="editProfile()">Modifier le profil</button>
+</div>
+
+<ng-template #noUser>
+  <p>Aucun utilisateur connecté.</p>
+</ng-template>
+
+
+

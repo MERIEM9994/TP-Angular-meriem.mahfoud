@@ -1,40 +1,64 @@
 import { Routes } from '@angular/router';
+
 import { CatalogComponent } from './catalog/catalog.component';
 import { ProductDetailsPageComponent } from './product-details-page/product-details-page.component';
 import { ProductDetailsComponent } from './product-details/product-details.component';
-import { CartComponent } from './cart/cart.component'; // ✅ Import du composant panier
+import { CartComponent } from './cart/cart.component';
+import { LoginComponent } from './user/login/login.component';
+import { RegisterComponent } from './user/register/register.component';
+import { ProfileComponent } from './user/profile/profile.component';
 
 export const routes: Routes = [
-  { 
+  {
     path: 'products/:id',
     component: ProductDetailsPageComponent,
     children: [
-      { 
-        path: '', 
+      {
+        path: '',
         component: ProductDetailsComponent,
-        title: 'Détails du produit' // Ajout de title pour l'accessibilité
+        title: 'Détails du produit'
       }
     ]
   },
-  { 
-    path: 'catalog', 
+  {
+    path: 'catalog',
     component: CatalogComponent,
-    title: 'Catalogue' 
+    title: 'Catalogue'
   },
-  { 
-    path: 'cart', 
+  {
+    path: 'cart',
     component: CartComponent,
-    title: 'Mon Panier' 
+    title: 'Mon Panier'
   },
-  { 
-    path: '', 
-    redirectTo: '/catalog', 
-    pathMatch: 'full' 
+
+  // Routes d'authentification et profil
+  {
+    path: 'login',
+    component: LoginComponent,
+    title: 'Connexion'
   },
-  { 
-    path: '**', 
+  {
+    path: 'register',
+    component: RegisterComponent,
+    title: 'Inscription'
+  },
+  {
+    path: 'profile/:id',
+    component: ProfileComponent,
+    title: 'Profil utilisateur'
+  },
+
+  // Route par défaut
+  {
+    path: '',
     redirectTo: '/catalog',
-    title: 'Page non trouvée' 
+    pathMatch: 'full'
+  },
+
+  // Wildcard pour route non trouvée
+  {
+    path: '**',
+    redirectTo: '/catalog',
+    title: 'Page non trouvée'
   }
 ];
-

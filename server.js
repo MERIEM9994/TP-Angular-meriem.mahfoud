@@ -14,10 +14,10 @@ const API_BASE = `/api/${API_VERSION}`;
 // MIDDLEWARES
 // ======================
 app.use(cors({
-  origin: 'http://localhost:4200', // Angular
-  methods: ['GET', 'POST', 'PATCH']  // Ajout PATCH ici pour autoriser la méthode
+  origin: 'http://localhost:4200',
+  methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
-
 app.use(express.json({ limit: '10kb' }));
 
 // ======================
@@ -99,36 +99,28 @@ const products = [
 ];
 
 // ======================
-// ROUTES API
+// ROUTES PRODUITS
 // ======================
 app.get('/', (req, res) => {
   res.send(`API e-commerce fonctionnelle (Version ${API_VERSION})`);
 });
 
-// Liste produits (format { data: [...] })
 app.get(`${API_BASE}/products`, (req, res) => {
   res.json({ data: products });
 });
 
-// Détails produit par ID
 app.get(`${API_BASE}/products/:id(\\d+)`, (req, res) => {
-  const id = parseInt(req.params.id, 10);
+  const id = Number(req.params.id);
   const product = products.find(p => p.id === id);
-  if (product) {
-    res.json(product);
-  } else {
-    res.status(404).json({ error: `Produit avec ID ${id} non trouvé` });
-  }
+  if (product) res.json(product);
+  else res.status(404).json({ error: `Produit avec ID ${id} non trouvé` });
 });
 
-// === NOUVELLE ROUTE PATCH POUR MISE À JOUR QUANTITÉ ===
 app.patch(`${API_BASE}/products/:id(\\d+)`, (req, res) => {
-  const id = parseInt(req.params.id, 10);
+  const id = Number(req.params.id);
   const product = products.find(p => p.id === id);
 
-  if (!product) {
-    return res.status(404).json({ error: `Produit avec ID ${id} non trouvé` });
-  }
+  if (!product) return res.status(404).json({ error: `Produit avec ID ${id} non trouvé` });
 
   const { quantity } = req.body;
 
@@ -137,12 +129,19 @@ app.patch(`${API_BASE}/products/:id(\\d+)`, (req, res) => {
   }
 
   product.quantity = quantity;
-
   res.json({ message: 'Quantité mise à jour', product });
 });
 
 // ======================
-// SERVIR LES IMAGES STATIQUES
+// ROUTES UTILISATEURS
+// ======================
+// Vérifie que le chemin est correct
+const userRoutes = require('./user.routes');
+
+app.use(`${API_BASE}/users`, userRoutes);
+
+// ======================
+// IMAGES STATIQUES
 // ======================
 app.use('/assets/images', express.static(path.join(__dirname, 'public/images'), {
   maxAge: '1d',
@@ -153,21 +152,22 @@ app.use('/assets/images', express.static(path.join(__dirname, 'public/images'), 
 // GESTION DES ERREURS
 // ======================
 app.use((req, res) => {
-  res.status(404).json({ 
+  res.status(404).json({
     error: 'Endpoint non trouvé',
     availableEndpoints: [
       `${API_BASE}/products`,
       `${API_BASE}/products/:id`,
-      `${API_BASE}/products/:id (PATCH)`
+      `${API_BASE}/products/:id (PATCH)`,
+      `${API_BASE}/users/register`,
+      `${API_BASE}/users/login`,
+      `${API_BASE}/users/profile/:id`
     ]
   });
 });
 
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({ 
-    error: 'Erreur serveur interne'
-  });
+  console.error('Erreur interne:', err.stack);
+  res.status(500).json({ error: 'Erreur serveur interne' });
 });
 
 // ======================
@@ -175,9 +175,11 @@ app.use((err, req, res, next) => {
 // ======================
 app.listen(PORT, () => {
   console.log(`🛒 Serveur e-commerce démarré sur http://localhost:${PORT}`);
-  console.log(`Endpoints disponibles :`);
-  console.log(`➡️  ${API_BASE}/products - Liste des produits`);
-  console.log(`➡️  ${API_BASE}/products/:id - Détails d'un produit`);
-  console.log(`➡️  ${API_BASE}/products/:id (PATCH) - Mise à jour quantité`);
-  console.log(`📁 Assets statiques : http://localhost:${PORT}/assets/images/[nom-image]`);
+  console.log(`➡️  ${API_BASE}/products`);
+  console.log(`➡️  ${API_BASE}/products/:id`);
+  console.log(`➡️  ${API_BASE}/products/:id (PATCH)`);
+  console.log(`➡️  ${API_BASE}/users/register`);
+  console.log(`➡️  ${API_BASE}/users/login`);
+  console.log(`➡️  ${API_BASE}/users/profile/:id`);
+  console.log(`📁 Images : http://localhost:${PORT}/assets/images/[nom-image]`);
 });

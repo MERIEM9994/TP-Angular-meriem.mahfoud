@@ -1,0 +1,30 @@
+.profile-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.1);
+}
+
+.profile-info p {
+  font-size: 1.1rem;
+  margin-bottom: 0.8rem;
+}
+
+.btn-edit {
+  margin-top: 1.2rem;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  background-color: #3f51b5;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-edit:hover {
+  background-color: #303f9f;
+}
+
+

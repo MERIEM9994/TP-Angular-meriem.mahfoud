@@ -1,0 +1,36 @@
+<div class="register-container">
+  <h2>📝 Inscription</h2>
+
+  <form (ngSubmit)="onRegister()" #registerForm="ngForm">
+    <input 
+      type="text" 
+      name="name" 
+      [(ngModel)]="name" 
+      placeholder="Nom complet" 
+      required />
+
+    <input 
+      type="email" 
+      name="email" 
+      [(ngModel)]="email" 
+      placeholder="Email" 
+      required />
+
+    <input 
+      type="password" 
+      name="password" 
+      [(ngModel)]="password" 
+      placeholder="Mot de passe" 
+      required />
+
+    <button type="submit" [disabled]="registerForm.invalid">Créer un compte</button>
+  </form>
+
+  <p class="redirect-msg">
+    Déjà inscrit ?
+    <a routerLink="/login">Se connecter</a>
+  </p>
+</div>
+
+
+

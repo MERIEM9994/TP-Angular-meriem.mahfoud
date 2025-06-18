@@ -1,0 +1,29 @@
+<div class="login-container">
+  <h2>🔐 Connexion</h2>
+
+  <form (ngSubmit)="onLogin()" #loginForm="ngForm">
+    <input 
+      type="email" 
+      name="email" 
+      [(ngModel)]="email" 
+      required 
+      placeholder="Email" />
+
+    <input 
+      type="password" 
+      name="password" 
+      [(ngModel)]="password" 
+      required 
+      placeholder="Mot de passe" />
+
+    <button type="submit" [disabled]="loginForm.invalid">Connexion</button>
+  </form>
+
+  <p class="redirect-msg">
+    Pas encore de compte ?
+    <a routerLink="/register">Créer un compte</a>
+  </p>
+</div>
+
+
+

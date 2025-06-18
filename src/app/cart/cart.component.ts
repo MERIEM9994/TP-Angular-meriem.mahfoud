@@ -1,6 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CartService, CartItem } from './cart.service';
+import { Router } from '@angular/router';  // <-- Import
+
+import { CartService } from './cart.service';
 
 @Component({
   selector: 'app-cart',
@@ -12,6 +14,7 @@ import { CartService, CartItem } from './cart.service';
 export class CartComponent {
   cartService = inject(CartService);
   cart$ = this.cartService.cart$;
+  private router = inject(Router);  // <-- Inject Router
 
   get total() {
     return this.cartService.getTotal();
@@ -43,4 +46,10 @@ export class CartComponent {
         alert("❌ Erreur lors de la commande : " + err.message);
       });
   }
+
+  // Nouvelle méthode pour la navigation
+  goToCatalog(): void {
+    this.router.navigate(['/catalog']);
+  }
 }
+
