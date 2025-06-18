@@ -51,6 +51,24 @@
     gap: 1rem;
   }
 }
+/* Style spécial pour le lien Accueil */
+.nav-bar a.home-link {
+  background-color: #87cefa; /* bleu ciel */
+  color: white;
+  font-weight: bold;
+}
+
+.nav-bar a.home-link:hover {
+  background-color: #5bb6e6; /* bleu ciel foncé */
+  box-shadow: 0 0 8px #87cefa;
+}
+
+/* Active sur Accueil */
+.nav-bar a.home-link.active {
+  background-color: #ff69b4;
+  color: white;
+  box-shadow: 0 0 10px #ff69b4;
+}
 
 
 

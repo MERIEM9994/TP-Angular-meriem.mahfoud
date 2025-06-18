@@ -7,6 +7,7 @@ import { CartComponent } from './cart/cart.component';
 import { LoginComponent } from './user/login/login.component';
 import { RegisterComponent } from './user/register/register.component';
 import { ProfileComponent } from './user/profile/profile.component';
+import { HomeComponent } from './home/home.component'; // <-- Import ajouté
 
 export const routes: Routes = [
   {
@@ -48,17 +49,18 @@ export const routes: Routes = [
     title: 'Profil utilisateur'
   },
 
-  // Route par défaut
+  // Nouvelle route pour la page d'accueil
   {
     path: '',
-    redirectTo: '/catalog',
-    pathMatch: 'full'
+    component: HomeComponent,
+    title: 'Accueil'
   },
 
   // Wildcard pour route non trouvée
   {
     path: '**',
-    redirectTo: '/catalog',
+    redirectTo: '',
     title: 'Page non trouvée'
   }
 ];
+

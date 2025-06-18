@@ -1,12 +1,19 @@
 <header class="app-header">
   <nav class="nav-bar">
+    <a 
+      routerLink="/" 
+      routerLinkActive="active" 
+      [routerLinkActiveOptions]="{ exact: true }" 
+      class="home-link">Accueil</a>
+      
     <a routerLink="/catalog" routerLinkActive="active">Catalogue</a>
     <a routerLink="/cart" routerLinkActive="active" class="cart-link">Panier 🛒</a>
     <a routerLink="/login" routerLinkActive="active">Connexion</a>
     <a routerLink="/register" routerLinkActive="active">Inscription</a>
     <a routerLink="/profile/1" routerLinkActive="active">Profil</a>
-
   </nav>
 </header>
 
 <router-outlet></router-outlet>
+
+
