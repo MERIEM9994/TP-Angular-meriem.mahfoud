@@ -14,7 +14,7 @@ export interface User {
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:3000/api/v1/users';  // <-- corrigé : /users et non /auth
+  private baseUrl = 'http://localhost:3000/api/v1/users';  // Endpoint backend
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
@@ -29,7 +29,7 @@ export class AuthService {
     return this.http.post<{ user: User; token: string }>(`${this.baseUrl}/login`, credentials).pipe(
       tap(response => {
         this.setUser(response.user);
-        localStorage.setItem('token', response.token);
+        localStorage.setItem('authToken', response.token);  // clé 'authToken' pour correspondre à l'interceptor
       })
     );
   }
@@ -38,7 +38,7 @@ export class AuthService {
     return this.http.post<{ user: User; token: string }>(`${this.baseUrl}/register`, data).pipe(
       tap(response => {
         this.setUser(response.user);
-        localStorage.setItem('token', response.token);
+        localStorage.setItem('authToken', response.token);
       })
     );
   }
@@ -50,19 +50,26 @@ export class AuthService {
 
   logout() {
     this.currentUserSubject.next(null);
-    localStorage.removeItem('token');
+    localStorage.removeItem('authToken');
     localStorage.removeItem('user');
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('token');
+    return !!localStorage.getItem('authToken');
   }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return localStorage.getItem('authToken');
   }
 
   getCurrentUser(): User | null {
     return this.currentUserSubject.value;
   }
+
+  // Méthode pour vérifier si l'utilisateur est admin
+  isAdmin(): boolean {
+    const user = this.getCurrentUser();
+    return user?.role === 'admin';
+  }
 }
+

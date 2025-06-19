@@ -11,6 +11,8 @@
     <a routerLink="/login" routerLinkActive="active">Connexion</a>
     <a routerLink="/register" routerLinkActive="active">Inscription</a>
     <a routerLink="/profile/1" routerLinkActive="active">Profil</a>
+    <a *ngIf="authService.isAdmin()" routerLink="/admin" routerLinkActive="active">Admin</a>
+
   </nav>
 </header>
 

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component } from '@angular/core'; 
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -20,17 +20,18 @@ export class LoginComponent {
   onLogin() {
     this.auth.login({ email: this.email, password: this.password }).subscribe({
       next: (response) => {
-        // Ici on attend une réponse contenant user et token
         const { user, token } = response;
 
-        // Stocker le token (pour les requêtes futures)
         localStorage.setItem('authToken', token);
-
-        // On peut aussi stocker les infos utilisateur si besoin
+        localStorage.setItem('userRole', user.role);
         localStorage.setItem('user', JSON.stringify(user));
 
-        // Naviguer vers le profil ou une autre page sécurisée
-        this.router.navigate(['/profile']);
+        // Redirection selon rôle
+        if (user.role === 'admin') {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/profile', user.id]);
+        }
       },
       error: (err) => {
         alert("Erreur : " + (err.error?.message || 'Connexion échouée.'));
@@ -38,5 +39,3 @@ export class LoginComponent {
     });
   }
 }
-
-

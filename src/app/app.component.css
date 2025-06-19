@@ -69,6 +69,13 @@
   color: white;
   box-shadow: 0 0 10px #ff69b4;
 }
+.app-header {
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 1000;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
 
 
 

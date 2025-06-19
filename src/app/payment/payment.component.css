@@ -1,0 +1,127 @@
+/* ===== PAGE PAIEMENT ===== */
+
+h2 {
+  text-align: center;
+  color: #d6336c;
+  font-weight: 700;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Boutons mode de paiement */
+button {
+  padding: 0.8rem 1.6rem;
+  margin: 0.5rem;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 8px rgba(214, 51, 108, 0.3);
+}
+
+button:hover {
+  transform: translateY(-2px);
+}
+
+button:focus {
+  outline: none;
+}
+
+button:first-child {
+  background-color: #d6336c;
+  color: white;
+}
+
+button:first-child:hover {
+  background-color: #9f224e;
+}
+
+button:last-child {
+  background-color: #28a745;
+  color: white;
+}
+
+button:last-child:hover {
+  background-color: #218838;
+}
+
+hr {
+  margin: 2rem 0;
+  border: none;
+  border-top: 1px solid #f5c6cb;
+}
+
+/* Formulaires */
+form {
+  background-color: #fff0f6;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 12px rgba(214, 51, 108, 0.2);
+  max-width: 500px;
+  margin: 1rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+form h3 {
+  color: #9f224e;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+form input {
+  padding: 0.7rem 1rem;
+  border: 1.5px solid #d6336c;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+form input:focus {
+  border-color: #9f224e;
+  outline: none;
+}
+
+form button {
+  background-color: #d6336c;
+  color: white;
+  margin-top: 1rem;
+  padding: 0.8rem 1.6rem;
+  border-radius: 25px;
+  font-weight: 700;
+  font-size: 1rem;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(214, 51, 108, 0.3);
+  transition: background-color 0.3s ease;
+}
+
+form button:hover {
+  background-color: #9f224e;
+}
+
+/* Message final */
+.payment-done-message {
+  text-align: center;
+  padding: 2rem;
+  background-color: #fff0f6;
+  border-radius: 16px;
+  box-shadow: 0 6px 12px rgba(214, 51, 108, 0.2);
+  max-width: 600px;
+  margin: 2rem auto;
+}
+
+.payment-done-message h3 {
+  color: #28a745;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.payment-done-message p {
+  font-size: 1.2rem;
+  color: #333;
+}
+

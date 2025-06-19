@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';  // <-- Import
+import { Router } from '@angular/router';
 
 import { CartService } from './cart.service';
 
@@ -14,7 +14,7 @@ import { CartService } from './cart.service';
 export class CartComponent {
   cartService = inject(CartService);
   cart$ = this.cartService.cart$;
-  private router = inject(Router);  // <-- Inject Router
+  private router = inject(Router);
 
   get total() {
     return this.cartService.getTotal();
@@ -37,19 +37,16 @@ export class CartComponent {
     this.cartService.clearCart();
   }
 
+  // 🚀 Aller vers la page de paiement
   order() {
-    this.cartService.checkout()
-      .then(() => {
-        alert("✅ Merci pour votre commande !");
-      })
-      .catch(err => {
-        alert("❌ Erreur lors de la commande : " + err.message);
-      });
+    this.router.navigate(['/payment']);
   }
 
-  // Nouvelle méthode pour la navigation
+  // Retour au catalogue
   goToCatalog(): void {
     this.router.navigate(['/catalog']);
   }
 }
+
+
 

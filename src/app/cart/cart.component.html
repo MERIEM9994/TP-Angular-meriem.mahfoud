@@ -29,21 +29,35 @@
   </p>
 
   <div class="cart-actions">
-    <button class="clear-btn" (click)="clear()" [disabled]="cartItems.length === 0">🧹 Vider le panier</button>
-    <button class="order-btn" (click)="order()" [disabled]="cartItems.length === 0">✅ Commander</button>
+    <button 
+      class="clear-btn" 
+      (click)="clear()" 
+      [disabled]="cartItems.length === 0">
+      🧹 Vider le panier
+    </button>
+
+    <!-- Bouton Commander corrigé -->
+    <button 
+      class="order-btn" 
+      (click)="order()" 
+      [disabled]="cartItems.length === 0">
+      🛒 Commander
+    </button>
   </div>
 
-  <!-- Garder uniquement ce bouton retour au catalogue -->
+  <!-- Bouton retour au catalogue -->
   <div class="back-catalog-wrapper">
     <a routerLink="/catalog" class="back-btn">← Retour au catalogue</a>
   </div>
 </div>
 
+<!-- Panier vide -->
 <ng-template #emptyCart>
   <p class="empty-message">Le panier est vide.</p>
   <button (click)="goToCatalog()" class="back-btn">← Retour au catalogue</button>
-
 </ng-template>
+
+
 
 
 

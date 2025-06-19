@@ -7,7 +7,12 @@ import { CartComponent } from './cart/cart.component';
 import { LoginComponent } from './user/login/login.component';
 import { RegisterComponent } from './user/register/register.component';
 import { ProfileComponent } from './user/profile/profile.component';
-import { HomeComponent } from './home/home.component'; // <-- Import ajouté
+import { HomeComponent } from './home/home.component';
+import { AdminComponent } from './admin/admin.component';
+import { authGuard } from './auth.guard';
+
+// 👉 On importe aussi PaymentComponent
+import { PaymentComponent } from './payment/payment.component';
 
 export const routes: Routes = [
   {
@@ -32,6 +37,13 @@ export const routes: Routes = [
     title: 'Mon Panier'
   },
 
+  // 👉 Nouvelle route : page paiement
+  {
+    path: 'payment',
+    component: PaymentComponent,
+    title: 'Paiement de la commande'
+  },
+
   // Routes d'authentification et profil
   {
     path: 'login',
@@ -49,6 +61,14 @@ export const routes: Routes = [
     title: 'Profil utilisateur'
   },
 
+  // Route admin
+  {
+    path: 'admin',
+    component: AdminComponent,
+    title: 'Administration',
+    canActivate: [authGuard]
+  },
+
   // Nouvelle route pour la page d'accueil
   {
     path: '',
@@ -63,4 +83,3 @@ export const routes: Routes = [
     title: 'Page non trouvée'
   }
 ];
-

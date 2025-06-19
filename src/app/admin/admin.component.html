@@ -1,0 +1,73 @@
+<div class="admin-container">
+  <h1>Bienvenue, Administrateur 👩‍💼</h1>
+
+  <section class="add-user-section">
+    <h2>Ajouter un nouvel utilisateur</h2>
+    <form (ngSubmit)="addUser()" #userForm="ngForm" class="form-add-user">
+      <input
+        type="text"
+        placeholder="Nom complet"
+        [(ngModel)]="newUser.name"
+        name="name"
+        required
+      />
+      <input
+        type="email"
+        placeholder="Email"
+        [(ngModel)]="newUser.email"
+        name="email"
+        required
+      />
+      <input
+        type="password"
+        placeholder="Mot de passe"
+        [(ngModel)]="newUser.password"
+        name="password"
+        required
+      />
+      <select [(ngModel)]="newUser.role" name="role" required>
+        <option value="user">Utilisateur</option>
+        <option value="admin">Administrateur</option>
+      </select>
+      <button type="submit" [disabled]="userForm.invalid">Ajouter</button>
+    </form>
+    <p class="error" *ngIf="errorMsg">{{ errorMsg }}</p>
+  </section>
+
+  <section class="list-users-section">
+    <h2>Liste des utilisateurs</h2>
+
+    <p *ngIf="loading">Chargement des utilisateurs...</p>
+    <p class="error" *ngIf="errorMsg && !loading">{{ errorMsg }}</p>
+
+    <table *ngIf="users.length > 0" class="users-table">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let user of users">
+          <td>{{ user.name }}</td>
+          <td>{{ user.email }}</td>
+          <td>
+            <span
+              [class.admin-role]="user.role === 'admin'"
+              [class.user-role]="user.role !== 'admin'"
+            >
+              {{ user.role }}
+            </span>
+          </td>
+          <td>
+            <button class="btn-delete" (click)="deleteUser(user.id)">Supprimer</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="users.length === 0 && !loading">Aucun utilisateur trouvé.</p>
+  </section>
+</div>
