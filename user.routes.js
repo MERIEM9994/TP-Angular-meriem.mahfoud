@@ -1,9 +1,16 @@
+require('dotenv').config();
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 
-const JWT_SECRET = 'uneCleSecretePourJWT123!'; // À sécuriser en production
+const JWT_SECRET = process.env.JWT_SECRET;
 
+if (!JWT_SECRET) {
+  console.error('⚠️ JWT_SECRET non défini dans .env');
+  process.exit(1);
+}
+
+// Simuler une base de données utilisateurs
 const users = [
   { id: 1, name: 'Meriem', email: 'meriem@example.com', password: 'pass456', role: 'admin' },
   { id: 2, name: 'Aya', email: 'aya@example.com', password: 'pass123', role: 'user' }
@@ -41,10 +48,22 @@ function adminOnly(req, res, next) {
   next();
 }
 
+// Middleware vérification accès profil (admin ou owner)
+function profileAccess(req, res, next) {
+  const userId = parseInt(req.params.id, 10);
+  if (req.user.role !== 'admin' && req.user.id !== userId) {
+    return res.status(403).json({ message: 'Accès refusé' });
+  }
+  next();
+}
+
 // Routes publiques
 
 router.post('/login', (req, res) => {
   const { email, password } = req.body;
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email et mot de passe requis' });
+  }
   const user = users.find(u => u.email === email && u.password === password);
   if (!user) {
     console.log('Login failed: email ou mot de passe incorrect');
@@ -81,8 +100,8 @@ router.post('/register', (req, res) => {
   res.status(201).json({ user: userData, token });
 });
 
-// Profil utilisateur
-router.get('/profile/:id', authMiddleware, (req, res) => {
+// Profil utilisateur (accessible par admin ou utilisateur lui-même)
+router.get('/profile/:id', authMiddleware, profileAccess, (req, res) => {
   const userId = parseInt(req.params.id, 10);
   const user = users.find(u => u.id === userId);
   if (!user) {
@@ -103,7 +122,7 @@ router.get('/', authMiddleware, adminOnly, (req, res) => {
   res.json(usersSansMdp);
 });
 
-// Ajout d’un utilisateur
+// Ajout d’un utilisateur par admin
 router.post('/', authMiddleware, adminOnly, (req, res) => {
   console.log('POST /users - ajout utilisateur demandé par:', req.user.email);
   console.log('Body reçu:', req.body);
@@ -112,6 +131,10 @@ router.post('/', authMiddleware, adminOnly, (req, res) => {
   if (!name || !email || !password || !role) {
     console.log('Ajout échoué: champs manquants');
     return res.status(400).json({ message: 'Champs manquants' });
+  }
+
+  if (!['user', 'admin'].includes(role)) {
+    return res.status(400).json({ message: 'Role invalide (user/admin uniquement)' });
   }
 
   const existingUser = users.find(u => u.email === email);
@@ -143,3 +166,4 @@ router.delete('/:id', authMiddleware, adminOnly, (req, res) => {
 });
 
 module.exports = router;
+

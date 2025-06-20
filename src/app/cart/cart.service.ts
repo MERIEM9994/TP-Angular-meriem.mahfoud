@@ -14,7 +14,9 @@ export interface CartItem {
 export class CartService {
   private cartItems = new BehaviorSubject<CartItem[]>([]);
   cart$ = this.cartItems.asObservable();
-  private apiUrl = 'http://localhost:3000/api/v1/products'; // Modifie si nécessaire
+
+  private apiProductsUrl = 'http://localhost:3000/api/v1/products';
+  private apiOrdersUrl = 'http://localhost:3000/api/v1/orders';
 
   constructor(private http: HttpClient) {}
 
@@ -51,27 +53,49 @@ export class CartService {
       total + item.product.price * item.quantity, 0);
   }
 
-  // ✅ Mise à jour du stock côté backend
+  // PATCH pour mise à jour du stock
   updateProductStock(productId: number, newQuantity: number) {
-    return this.http.patch(`${this.apiUrl}/${productId}`, { quantity: newQuantity });
+    return this.http.patch(`${this.apiProductsUrl}/${productId}`, { quantity: newQuantity });
   }
 
-  // ✅ Commande : envoie les mises à jour de stock pour chaque produit
-  checkout(): Promise<void> {
-    const updates = this.cartItems.value.map(item => {
-      const newQty = item.product.quantity - item.quantity;
-      return this.updateProductStock(item.product.id, newQty).toPromise();
-    });
+  // ✅ Commande complète : envoie vers API /orders + met à jour stock + vide le panier
+  async checkout(token: string, customerName: string): Promise<void> {
+    const cartItems = this.cartItems.value;
 
-    return Promise.all(updates)
-      .then(() => {
-        this.clearCart();
-        alert("✅ Merci pour votre commande !");
-      })
-      .catch(error => {
-        console.error("Erreur lors de la mise à jour du stock :", error);
-        alert("❌ Une erreur est survenue lors de la commande.");
+    // 1️⃣ Construction de la commande
+    const orderPayload = {
+      customerName: customerName,
+      totalAmount: this.getTotal(),
+      items: cartItems.map(item => ({
+        productId: item.product.id,
+        quantity: item.quantity
+      }))
+    };
+
+    try {
+      // 2️⃣ POST la commande vers l'API
+      await this.http.post(this.apiOrdersUrl, orderPayload, {
+        headers: {
+          Authorization: 'Bearer ' + token
+        }
+      }).toPromise();
+
+      // 3️⃣ PATCH des stocks
+      const stockUpdates = cartItems.map(item => {
+        const newQty = item.product.quantity - item.quantity;
+        return this.updateProductStock(item.product.id, newQty).toPromise();
       });
+
+      await Promise.all(stockUpdates);
+
+      // 4️⃣ Clear le panier
+      this.clearCart();
+
+      // 5️⃣ Confirmation
+      alert("✅ Merci pour votre commande !");
+    } catch (error) {
+      console.error("Erreur lors du checkout :", error);
+      alert("❌ Une erreur est survenue lors de la commande.");
+    }
   }
 }
-

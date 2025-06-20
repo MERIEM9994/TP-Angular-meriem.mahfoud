@@ -76,6 +76,27 @@
   z-index: 1000;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
+/* Style spécifique pour le lien Commandes */
+.nav-bar a.orders-link {
+  background-color: #87cefa; /* bleu ciel */
+  color: white;
+  font-weight: bold;
+  border-radius: 20px;
+  padding: 8px 16px;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+.nav-bar a.orders-link:hover {
+  background-color: #5bb6e6; /* bleu ciel foncé */
+  box-shadow: 0 0 8px #87cefa;
+}
+
+.nav-bar a.orders-link.active {
+  background-color: #ff69b4; /* rose clair */
+  color: white;
+  box-shadow: 0 0 10px #ff69b4;
+  font-weight: bold;
+}
 
 
 

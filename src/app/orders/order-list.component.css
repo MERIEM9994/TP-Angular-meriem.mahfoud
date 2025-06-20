@@ -1,0 +1,35 @@
+.order-list-container {
+  padding: 16px;
+  font-family: Arial, sans-serif;
+}
+
+.order-list-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-list-container th, 
+.order-list-container td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+.order-list-container th {
+  background-color: #f2f2f2;
+}
+
+.en-cours {
+  color: orange;
+  font-weight: bold;
+}
+
+.expediee {
+  color: blue;
+  font-weight: bold;
+}
+
+.livree {
+  color: green;
+  font-weight: bold;
+}

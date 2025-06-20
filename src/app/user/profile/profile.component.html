@@ -1,16 +1,33 @@
-<div class="profile-container" *ngIf="user$ | async as user; else noUser">
-  <h2>Profil Utilisateur</h2>
-  <div class="profile-info">
-    <p><strong>Nom :</strong> {{ user.name }}</p>
-    <p><strong>Email :</strong> {{ user.email }}</p>
-    <p><strong>Rôle :</strong> {{ user.role }}</p>
+<div class="profile-container">
+  <h2>👤 Mon Profil</h2>
+
+  <div *ngIf="user$ | async as user; else loading">
+    <p><strong>Nom:</strong> {{ user.name }}</p>
+    <p><strong>Email:</strong> {{ user.email }}</p>
+    <p><strong>Rôle:</strong> {{ user.role }}</p>
+
+    <h3>📦 Mes Commandes</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders$ | async">
+          <td>{{ order.id }}</td>
+          <td>{{ order.date | date:'dd/MM/yyyy' }}</td>
+          <td>{{ order.status }}</td>
+          <td>{{ order.totalAmount | currency:'EUR' }}</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-  <button class="btn-edit" (click)="editProfile()">Modifier le profil</button>
+
+  <ng-template #loading>
+    <p>Chargement du profil...</p>
+  </ng-template>
 </div>
-
-<ng-template #noUser>
-  <p>Aucun utilisateur connecté.</p>
-</ng-template>
-
-
-

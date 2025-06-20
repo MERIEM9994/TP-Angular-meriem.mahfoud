@@ -29,7 +29,7 @@ export class AuthService {
     return this.http.post<{ user: User; token: string }>(`${this.baseUrl}/login`, credentials).pipe(
       tap(response => {
         this.setUser(response.user);
-        localStorage.setItem('authToken', response.token);  // clé 'authToken' pour correspondre à l'interceptor
+        localStorage.setItem('jwt_token', response.token);  // <-- clé uniforme ici
       })
     );
   }
@@ -38,7 +38,7 @@ export class AuthService {
     return this.http.post<{ user: User; token: string }>(`${this.baseUrl}/register`, data).pipe(
       tap(response => {
         this.setUser(response.user);
-        localStorage.setItem('authToken', response.token);
+        localStorage.setItem('jwt_token', response.token);  // <-- et ici aussi
       })
     );
   }
@@ -50,16 +50,16 @@ export class AuthService {
 
   logout() {
     this.currentUserSubject.next(null);
-    localStorage.removeItem('authToken');
+    localStorage.removeItem('jwt_token');  // <-- idem ici
     localStorage.removeItem('user');
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('authToken');
+    return !!localStorage.getItem('jwt_token');
   }
 
   getToken(): string | null {
-    return localStorage.getItem('authToken');
+    return localStorage.getItem('jwt_token');
   }
 
   getCurrentUser(): User | null {

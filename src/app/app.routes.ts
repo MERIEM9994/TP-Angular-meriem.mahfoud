@@ -14,6 +14,9 @@ import { authGuard } from './auth.guard';
 // 👉 On importe aussi PaymentComponent
 import { PaymentComponent } from './payment/payment.component';
 
+// 👉 On importe OrderListComponent (suivi des commandes)
+import { OrderListComponent } from './orders/order-list.component';
+
 export const routes: Routes = [
   {
     path: 'products/:id',
@@ -42,6 +45,13 @@ export const routes: Routes = [
     path: 'payment',
     component: PaymentComponent,
     title: 'Paiement de la commande'
+  },
+
+  // 👉 Nouvelle route : suivi des commandes
+  {
+    path: 'orders',
+    component: OrderListComponent,
+    title: 'Mes Commandes'
   },
 
   // Routes d'authentification et profil
@@ -83,3 +93,4 @@ export const routes: Routes = [
     title: 'Page non trouvée'
   }
 ];
+

@@ -1,3 +1,8 @@
+require('dotenv').config();
+
+console.log('JWT_SECRET:', process.env.JWT_SECRET);
+
+
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -75,6 +80,12 @@ const userRoutes = require('./user.routes');
 app.use(`${API_BASE}/users`, userRoutes);
 
 // ======================
+// ROUTES COMMANDES (API)
+// ======================
+const orderRoutes = require('./order.routes');
+app.use(`${API_BASE}/orders`, orderRoutes);
+
+// ======================
 // IMAGES STATIQUES (API)
 // ======================
 app.use('/assets/images', express.static(path.join(__dirname, 'public/images'), {
@@ -115,5 +126,7 @@ app.listen(PORT, () => {
   console.log(`➡️  ${API_BASE}/users/register`);
   console.log(`➡️  ${API_BASE}/users/login`);
   console.log(`➡️  ${API_BASE}/users/profile/:id`);
+  console.log(`➡️  ${API_BASE}/orders`);
+  console.log(`➡️  ${API_BASE}/orders/:id`);
   console.log(`📁 Images : http://localhost:${PORT}/assets/images/[nom-image]`);
 });

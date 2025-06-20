@@ -1,1 +1,40 @@
-<p>payment works!</p>
+<h2>Paiement de votre commande</h2>
+
+<!-- Choix du mode de paiement -->
+<div>
+  <button (click)="selectMode('card')">💳 Payer par carte</button>
+  <button (click)="selectMode('cash')">💵 Paiement à la livraison</button>
+</div>
+
+<hr>
+
+<!-- Formulaire carte -->
+<div *ngIf="mode === 'card' && !paymentDone">
+  <h3>Paiement par carte</h3>
+  <form (ngSubmit)="submitCard()" #cardForm="ngForm">
+    <input type="text" placeholder="Votre nom" required ngModel name="customerName" [(ngModel)]="customerName">
+    <input type="text" placeholder="Numéro de carte" required ngModel name="cardNumber">
+    <input type="text" placeholder="Date d'expiration (MM/AA)" required ngModel name="expiryDate">
+    <input type="text" placeholder="CVV" required ngModel name="cvv">
+    <input type="text" placeholder="Adresse de livraison" required ngModel name="address">
+    <button type="submit">Valider</button>
+  </form>
+</div>
+
+<!-- Formulaire cash -->
+<div *ngIf="mode === 'cash' && !paymentDone">
+  <h3>Paiement à la livraison</h3>
+  <form (ngSubmit)="submitCash()" #cashForm="ngForm">
+    <input type="text" placeholder="Votre nom" required ngModel name="customerName" [(ngModel)]="customerName">
+    <input type="text" placeholder="Adresse de livraison" required ngModel name="address">
+    <input type="text" placeholder="Numéro de téléphone" required ngModel name="phone">
+    <button type="submit">Valider</button>
+  </form>
+</div>
+
+<!-- Message final -->
+<div *ngIf="paymentDone">
+  <h3>✅ Votre commande sera livrée sous une semaine !</h3>
+  <p>Merci pour votre achat 🎉</p>
+  <button (click)="backToCatalog()">← Retour au catalogue</button>
+</div>
