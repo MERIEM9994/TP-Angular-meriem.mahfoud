@@ -216,3 +216,5 @@ Grâce à ce TP, plusieurs compétences essentielles ont été mobilisées :
 - 📱 Design responsive & UI moderne  
 
 ✨ Ce projet constitue une base solide pour développer des applications web **professionnelles et évolutives**.
+
+📸 Vous trouverez les images (captures d'écran) de l'application dans le projet, dossier `public/screan-app` 🗂️.
